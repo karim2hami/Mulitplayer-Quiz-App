@@ -16,7 +16,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.jplquiz.controller.ClientQuestionScreen">
    <children>
       <BorderPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #612CB9;">
@@ -26,31 +25,38 @@
                   <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="1000.0" style="-fx-background-color: #FFFF; -fx-background-radius: 5;" />
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="lb_questionCounter" text="Question 1 of 20">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lb_question" text="What is the capital city of Switzerland?">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="50.0" right="50.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Label fx:id="lb_playerPoints" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="10'321">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                           <HBox.margin>
+                        <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="900.0">
+                           <children>
+                              <Label fx:id="lb_questionCounter" text="Question 1 of 20">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lb_question" text="What is the capital city of Switzerland?">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="50.0" right="50.0" />
+                                 </HBox.margin>
+                              </Label>
+                           </children>
+                           <opaqueInsets>
                               <Insets />
+                           </opaqueInsets>
+                        </HBox>
+                        <Label fx:id="lb_playerPoints" alignment="CENTER" contentDisplay="CENTER" text="10'321">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets top="25.0" />
                            </HBox.margin>
                         </Label>
                      </children>
-                     <StackPane.margin>
-                        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
-                     </StackPane.margin>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
                   </HBox>
                </children>
                <BorderPane.margin>
@@ -69,14 +75,14 @@
                   </Label>
                </children>
                <BorderPane.margin>
-                  <Insets left="20.0" top="70.0" />
+                  <Insets left="30.0" top="70.0" />
                </BorderPane.margin>
             </StackPane>
          </left>
          <center>
             <VBox alignment="TOP_CENTER" prefHeight="313.0" prefWidth="560.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="img_question" fitHeight="200.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="img_question" fitHeight="331.0" fitWidth="526.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../icons/switzerland.jpeg" />
                      </image>
@@ -86,8 +92,8 @@
                   </ImageView>
                   <StackPane prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="580.0" style="-fx-background-color: #FFFF; -fx-background-radius: 5;" />
-                        <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="540.0">
+                        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="820.0" style="-fx-background-color: #FFFF; -fx-background-radius: 5;" />
+                        <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="781.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -97,36 +103,36 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="btn_A" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="100.0" prefWidth="260.0" style="-fx-background-color: #FF006E;" text="A) Answer 1" textFill="WHITE">
+                              <Button fx:id="btn_A" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="120.0" prefWidth="380.0" style="-fx-background-color: #FF006E;" text="A) Answer 1" textFill="WHITE">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                                  <GridPane.margin>
-                                    <Insets bottom="15.0" right="10.0" />
+                                    <Insets bottom="5.0" right="5.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button fx:id="btn_B" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="100.0" prefWidth="260.0" style="-fx-background-color: #3A86FF;" text="B) Answer 2" textFill="WHITE" GridPane.columnIndex="1">
+                              <Button fx:id="btn_B" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="120.0" prefWidth="380.0" style="-fx-background-color: #3A86FF;" text="B) Answer 2" textFill="WHITE" GridPane.columnIndex="1">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                                  <GridPane.margin>
-                                    <Insets bottom="15.0" left="10.0" />
+                                    <Insets bottom="5.0" left="5.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button fx:id="btn_C" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="100.0" prefWidth="260.0" style="-fx-background-color: #FFBE0B;" text="C) Answer 3" textFill="WHITE" GridPane.rowIndex="1">
+                              <Button fx:id="btn_C" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="120.0" prefWidth="380.0" style="-fx-background-color: #FFBE0B;" text="C) Answer 3" textFill="WHITE" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                                  <GridPane.margin>
-                                    <Insets right="10.0" top="15.0" />
+                                    <Insets right="5.0" top="5.0" />
                                  </GridPane.margin>
                               </Button>
-                              <Button fx:id="btn_D" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="100.0" prefWidth="260.0" style="-fx-background-color: #FB5607;" text="D) Answer 4" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <Button fx:id="btn_D" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="120.0" prefWidth="380.0" style="-fx-background-color: #FB5607;" text="D) Answer 4" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                                  <GridPane.margin>
-                                    <Insets left="10.0" top="15.0" />
+                                    <Insets left="5.0" top="5.0" />
                                  </GridPane.margin>
                               </Button>
                            </children>
