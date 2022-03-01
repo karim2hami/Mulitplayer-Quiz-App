@@ -6,4 +6,6 @@ module com.example.jplquiz {
       javafx.fxml;
 
   exports com.example.jplquiz;
+  exports com.example.jplquiz.controller;
+  opens com.example.jplquiz.controller to javafx.fxml;
 }

@@ -7,11 +7,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class App extends Application {
   @Override
-  public void start(Stage stage) throws IOException {
+  public void start(Stage stage) {
     try{
-      FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(
+          "server-clientDashboard.fxml"));
       Scene scene = new Scene(fxmlLoader.load());
       stage.setTitle("Multiplayer Quiz App");
       stage.setScene(scene);
