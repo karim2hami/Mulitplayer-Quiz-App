@@ -8,17 +8,15 @@ public class Server {
 
   private ServerSocket serverSocket;
 
-
-  public Server(ServerSocket serverSocket){
-
+  public Server(ServerSocket serverSocket) {
 
     this.serverSocket = serverSocket;
   }
 
-  public void startServer(){
+  public void startServer() {
 
     try {
-      while (!serverSocket.isClosed()){
+      while (!serverSocket.isClosed()) {
         Socket socket = serverSocket.accept();
         System.out.println("A new Client has connected");
         ClientHandler clientHandler = new ClientHandler(socket);
@@ -27,19 +25,18 @@ public class Server {
         thread.start();
       }
 
-    } catch (IOException e){
-
+    } catch (IOException e) {
 
     }
   }
 
-  public void closeServerSocket(){
+  public void closeServerSocket() {
 
-    try{
-      if (serverSocket != null){
+    try {
+      if (serverSocket != null) {
         serverSocket.close();
       }
-    } catch(IOException e){
+    } catch (IOException e) {
       e.printStackTrace();
     }
   }
