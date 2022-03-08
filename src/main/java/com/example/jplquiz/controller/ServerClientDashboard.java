@@ -6,10 +6,11 @@ import javafx.scene.control.Label;
 
 public class ServerClientDashboard {
 
-  @FXML
-  private Button btn_start;
+  @FXML private Button btn_start;
 
-  @FXML
-  private Label lb_playerCounter;
+  @FXML private Label lb_playerCounter;
 
+  public void setLb_playerCounter(int number) {
+    lb_playerCounter.setText(Integer.toString(number));
+  }
 }
