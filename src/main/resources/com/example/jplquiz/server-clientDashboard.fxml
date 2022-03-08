@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-  xmlns:fx="http://javafx.com/fxml"
-  fx:controller="com.example.jplquiz.controller.ServerClientDashboard"
-  prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.jplquiz.controller.ServerClientDashboard">
   <children>
     <BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #612CB9;">
       <center>
@@ -30,7 +30,7 @@
                           <image>
                             <Image url="@../../../icons/Person.png" />
                           </image></ImageView>
-                        <Label fx:id="lb_playerCounter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="49.0" text="20" textFill="WHITE">
+                        <Label fx:id="lb_playerCounter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="49.0" text="0" textFill="WHITE">
                           <font>
                             <Font size="32.0" />
                           </font>
@@ -63,7 +63,7 @@
                     <Insets left="150.0" right="150.0" />
                   </HBox.margin>
                 </StackPane>
-                <Button mnemonicParsing="false" style="-fx-background-color: #E1E1E1;" text="Start">
+                <Button fx:id="btn_start" mnemonicParsing="false" style="-fx-background-color: #E1E1E1;" text="Start">
                   <font>
                     <Font size="24.0" />
                   </font></Button>
