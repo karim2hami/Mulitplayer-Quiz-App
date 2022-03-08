@@ -12,7 +12,7 @@ public class App extends Application {
   public void start(Stage stage) {
     try{
       FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(
-          "server-clientDashboard.fxml"));
+          "client-nickNameItem.fxml"));
       Scene scene = new Scene(fxmlLoader.load());
       stage.setTitle("Multiplayer Quiz App");
       stage.setScene(scene);
