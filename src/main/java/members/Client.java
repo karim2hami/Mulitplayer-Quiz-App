@@ -81,15 +81,4 @@ public class Client {
       e.printStackTrace();
     }
   }
-
-  public static void main(String[] args) throws IOException {
-
-    Scanner scan = new Scanner(System.in);
-    System.out.println("Enter your username for the game: ");
-    String username = scan.nextLine();
-    Socket socket = new Socket("localhost", 1234);
-    Client client = new Client(socket, username);
-    client.listenForMessage();
-    client.sendMessage();
-  }
 }

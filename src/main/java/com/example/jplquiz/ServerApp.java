@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import members.ServerThread;
 
 public class ServerApp extends Application {
 
@@ -21,6 +22,8 @@ public class ServerApp extends Application {
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
+      ServerThread serverThread = new ServerThread();
+      serverThread.execute();
     } catch (IOException e) {
       e.printStackTrace();
     }
