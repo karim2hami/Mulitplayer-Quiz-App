@@ -1,5 +1,6 @@
 package members;
 
+import com.example.jplquiz.controller.ServerClientDashboard;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -14,13 +15,15 @@ public class Client {
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
   private String userName;
+  private ServerClientDashboard serverClientDashboard;
 
-  public Client(Socket socket, String userName) {
+  public Client(Socket socket) {
     try {
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
+      this.serverClientDashboard = new ServerClientDashboard();
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -63,6 +66,12 @@ public class Client {
               }
             })
         .start();
+  }
+
+  public void getMessageFromController(String message) throws IOException {
+    this.userName = message;
+    System.out.println("Username received by Client class:" + userName);
+    serverClientDashboard.getMessageFromClient(message);
   }
 
   public void closeEverything(

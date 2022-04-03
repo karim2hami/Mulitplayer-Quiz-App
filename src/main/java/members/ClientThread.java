@@ -23,7 +23,7 @@ public class ClientThread implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Client client = new Client(socket, username);
+		Client client = new Client(socket);
 		client.listenForMessage();
 		client.sendMessage();
 	}
