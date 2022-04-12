@@ -90,6 +90,8 @@ public class Client {
                       questionModelList = (List<QuestionModel>) objectInputStream.readObject();
                       System.out.println(Arrays.toString(questionModelList.toArray()));
 
+                      transferQuestions();
+
                     } catch (ClassNotFoundException e) {
                       e.printStackTrace();
                     }
