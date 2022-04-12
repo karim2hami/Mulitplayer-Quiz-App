@@ -2,12 +2,18 @@ package members;
 
 import com.example.jplquiz.controller.ClientQuestionView;
 import com.example.jplquiz.models.QuestionModel;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import javafx.fxml.FXMLLoader;
 
 public class Client {
 
@@ -16,7 +22,8 @@ public class Client {
   private BufferedWriter bufferedWriter;
   private String userName;
   private List<QuestionModel> questionModelList;
-  private ClientQuestionView clientQuestionView = new ClientQuestionView();
+  private ClientQuestionView clientQuestionView;
+
 
 
 
@@ -26,6 +33,7 @@ public class Client {
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
+      this.clientQuestionView = new ClientQuestionView();
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -85,6 +93,8 @@ public class Client {
                       questionModelList = (List<QuestionModel>) objectInputStream.readObject();
                       System.out.println(Arrays.toString(questionModelList.toArray()));
 
+                      transferQuestions();
+
                     } catch (ClassNotFoundException e) {
                       e.printStackTrace();
                     }
@@ -95,6 +105,11 @@ public class Client {
               }
             })
         .start();
+  }
+
+  public void transferQuestions() {
+    clientQuestionView.setQuestionModels(this.questionModelList);
+    clientQuestionView.loadQuestionFromList(1);
   }
 
   public void closeEverything(
