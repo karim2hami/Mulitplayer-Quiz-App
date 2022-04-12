@@ -13,10 +13,19 @@ public class ClientLoginView {
   @FXML
   private TextField tfd_nickname;
 
-  @FXML
-  void getNickName() {
-    String username = tfd_nickname.getText();
-    System.out.println(username);
+  public Button getBtn_enter() {
+    return btn_enter;
   }
 
+  public void setBtn_enter(Button btn_enter) {
+    this.btn_enter = btn_enter;
+  }
+
+  public String getTfd_nickname() {
+    return tfd_nickname.getText();
+  }
+
+  public void setTfd_nickname(String tfd_nickname) {
+    this.tfd_nickname.setText(tfd_nickname);
+  }
 }
