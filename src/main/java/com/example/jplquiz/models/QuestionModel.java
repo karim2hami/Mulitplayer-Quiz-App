@@ -1,6 +1,8 @@
 package com.example.jplquiz.models;
 
-public class QuestionModel {
+import java.io.Serializable;
+
+public class QuestionModel implements Serializable {
 
   private String question;
   private String answerA;
@@ -69,22 +71,13 @@ public class QuestionModel {
 
   @Override
   public String toString() {
-    return "QuestionModel{"
-        + "questionA='"
-        + answerA
-        + '\''
-        + ", questionB='"
-        + answerB
-        + '\''
-        + ", questionC='"
-        + answerC
-        + '\''
-        + ", questionD='"
-        + answerD
-        + '\''
-        + ", rightAnswer='"
-        + rightAnswer
-        + '\''
-        + '}';
+    return "QuestionModel{" +
+        "question='" + question + '\'' +
+        ", answerA='" + answerA + '\'' +
+        ", answerB='" + answerB + '\'' +
+        ", answerC='" + answerC + '\'' +
+        ", answerD='" + answerD + '\'' +
+        ", rightAnswer='" + rightAnswer + '\'' +
+        '}';
   }
 }
