@@ -24,6 +24,7 @@ public class ServerApp extends Application {
       primaryStage.show();
       ServerThread serverThread = new ServerThread();
       serverThread.execute();
+
     } catch (IOException e) {
       e.printStackTrace();
     }

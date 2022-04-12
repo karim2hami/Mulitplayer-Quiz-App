@@ -1,11 +1,10 @@
 package members;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import com.example.jplquiz.models.QuestionModel;
+
+import java.io.*;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
@@ -14,6 +13,7 @@ public class Client {
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
   private String userName;
+  private List<QuestionModel> questionModelList;
 
   public Client(Socket socket, String userName) {
     try {
@@ -63,6 +63,32 @@ public class Client {
               }
             })
         .start();
+  }
+
+  public void listenForQuestions(){
+    new Thread(
+            new Runnable() {
+              @Override
+              public void run() {
+
+
+                while (socket.isConnected()) {
+                  try {
+                    InputStream inputStream = socket.getInputStream();
+                    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                    try{
+                      questionModelList = (List<QuestionModel>)objectInputStream.readObject();
+                      System.out.println(questionModelList);
+                    }catch (ClassNotFoundException e){
+                      e.printStackTrace();
+                    }
+                  } catch (IOException e) {
+                    closeEverything(socket, bufferedReader, bufferedWriter);
+                  }
+                }
+              }
+            })
+            .start();
   }
 
   public void closeEverything(
