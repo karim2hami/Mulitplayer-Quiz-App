@@ -1,5 +1,6 @@
 package members;
 
+import com.example.jplquiz.controller.ClientQuestionView;
 import com.example.jplquiz.models.QuestionModel;
 
 import java.io.*;
@@ -15,6 +16,9 @@ public class Client {
   private BufferedWriter bufferedWriter;
   private String userName;
   private List<QuestionModel> questionModelList;
+  private ClientQuestionView clientQuestionView = new ClientQuestionView();
+
+
 
   public Client(Socket socket, String userName) {
     try {
