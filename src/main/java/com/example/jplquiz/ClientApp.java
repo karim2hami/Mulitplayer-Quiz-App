@@ -17,7 +17,7 @@ public class ClientApp extends Application {
   public void start(Stage primaryStage) {
     try{
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-          "client-loginView.fxml"));
+          "client-questionView.fxml"));
       Scene scene = new Scene(fxmlLoader.load());
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
