@@ -3,6 +3,7 @@ package members;
 import com.example.jplquiz.models.QuestionModel;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Server {
@@ -26,6 +28,7 @@ public class Server {
     public void startServer() {
         try {
             while (!serverSocket.isClosed()) {
+
                 Socket socket = serverSocket.accept();
                 System.out.println("A new Client has connected");
 
@@ -37,6 +40,8 @@ public class Server {
                 thread.start();
 
                 readQuestions("src/main/resources/Questions/Questions.csv");
+
+                System.out.println(questionModelList);
 
                 OutputStream outputStream = socket.getOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
@@ -79,10 +84,13 @@ public class Server {
         }
 
         questionModelList = questions;
+        System.out.println("Hallo " +questionModelList);
+
     }
 
 
     public static QuestionModel createQuestionModel(String[] data) {
+        System.out.println(Arrays.toString(data));
         String question = data[0];
         String answerA = data[1];
         String answerB = data[2];

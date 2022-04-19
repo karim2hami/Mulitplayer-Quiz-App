@@ -67,28 +67,26 @@ public class Client {
 
   public void listenForQuestions(){
     new Thread(
-            new Runnable() {
-              @Override
-              public void run() {
+            () -> {
 
-
-                while (socket.isConnected()) {
-                  try {
-                    InputStream inputStream = socket.getInputStream();
-                    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                    try{
-                      questionModelList = (List<QuestionModel>)objectInputStream.readObject();
-                      System.out.println(questionModelList);
-                    }catch (ClassNotFoundException e){
-                      e.printStackTrace();
-                    }
-                  } catch (IOException e) {
-                    closeEverything(socket, bufferedReader, bufferedWriter);
+              while (socket.isConnected()) {
+                try {
+                  InputStream inputStream = socket.getInputStream();
+                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                  try{
+                    questionModelList = (List<QuestionModel>)objectInputStream.readObject();
+                    System.out.println(questionModelList);
+                  }catch (ClassNotFoundException e){
+                    e.printStackTrace();
                   }
+                } catch (IOException e) {
+                  closeEverything(socket, bufferedReader, bufferedWriter);
                 }
               }
             })
             .start();
+
+
   }
 
   public void closeEverything(
