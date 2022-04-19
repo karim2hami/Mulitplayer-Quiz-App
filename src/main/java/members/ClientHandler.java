@@ -1,7 +1,5 @@
 package members;
 
-import com.example.jplquiz.models.QuestionModel;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,7 +11,7 @@ import java.util.List;
 
 public class ClientHandler implements Runnable {
 
-  public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+  public static final List<ClientHandler> clientHandlers = new ArrayList<>();
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;

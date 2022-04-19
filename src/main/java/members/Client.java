@@ -4,6 +4,7 @@ import com.example.jplquiz.models.QuestionModel;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -67,26 +68,29 @@ public class Client {
 
   public void listenForQuestions(){
     new Thread(
-            () -> {
+            new Runnable() {
+              @Override
+              public void run() {
 
-              while (socket.isConnected()) {
-                try {
-                  InputStream inputStream = socket.getInputStream();
-                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                  try{
-                    questionModelList = (List<QuestionModel>)objectInputStream.readObject();
-                    System.out.println(questionModelList);
-                  }catch (ClassNotFoundException e){
-                    e.printStackTrace();
+                while (socket.isConnected()) {
+                  try {
+                    InputStream inputStream = socket.getInputStream();
+                    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                    try {
+
+                      questionModelList = (List<QuestionModel>) objectInputStream.readObject();
+                      System.out.println(Arrays.toString(questionModelList.toArray()));
+
+                    } catch (ClassNotFoundException e) {
+                      e.printStackTrace();
+                    }
+                  } catch (IOException e) {
+                    closeEverything(socket, bufferedReader, bufferedWriter);
                   }
-                } catch (IOException e) {
-                  closeEverything(socket, bufferedReader, bufferedWriter);
                 }
               }
             })
-            .start();
-
-
+        .start();
   }
 
   public void closeEverything(
