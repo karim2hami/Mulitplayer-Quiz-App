@@ -42,9 +42,9 @@ public class ClientQuestionView {
   // Methods
   @FXML
   public void loadQuestionFromList(int questionNumber) {
-    int qNumber = questionNumber;
-    QuestionModel questionModel = questionModels.get(qNumber);
-    System.out.println(questionModel);
+
+    QuestionModel questionModel = questionModels.get(questionNumber);
+    System.out.println("hallo" + questionModel);
 
     lb_question.setText(questionModel.getQuestion());
     btn_A.setText(questionModel.getAnswerA());

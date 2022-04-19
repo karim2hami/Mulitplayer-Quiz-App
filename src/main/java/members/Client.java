@@ -1,5 +1,6 @@
 package members;
 
+
 import com.example.jplquiz.controller.ClientQuestionView;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
@@ -10,10 +11,8 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-import javafx.fxml.FXMLLoader;
+
 
 public class Client {
 
@@ -22,7 +21,7 @@ public class Client {
   private BufferedWriter bufferedWriter;
   private String userName;
   private List<QuestionModel> questionModelList;
-  private ClientQuestionView clientQuestionView;
+
 
   public Client(Socket socket, String userName) {
     try {
@@ -30,7 +29,7 @@ public class Client {
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
-      this.clientQuestionView = new ClientQuestionView();
+
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -38,14 +37,11 @@ public class Client {
 
   public void sendMessage() {
     try {
-      bufferedWriter.write(userName);
-      bufferedWriter.newLine();
-      bufferedWriter.flush();
-
-      Scanner scan = new Scanner(System.in);
-      while (socket.isConnected()) {
-        String messageToSend = scan.nextLine();
+//      Scanner scan = new Scanner(System.in);
+      if (socket.isConnected()) {
+        String messageToSend = "hallo";
         bufferedWriter.write(userName + ": " + messageToSend);
+
         bufferedWriter.newLine();
         bufferedWriter.flush();
       }
@@ -77,35 +73,37 @@ public class Client {
 
   public void listenForQuestions(){
     new Thread(
-            new Runnable() {
-              @Override
-              public void run() {
-
-                while (socket.isConnected()) {
+            () -> {
+              while (socket.isConnected()) {
+                try {
+                  InputStream inputStream = socket.getInputStream();
+                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                   try {
-                    InputStream inputStream = socket.getInputStream();
-                    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                    try {
 
-                      questionModelList = (List<QuestionModel>) objectInputStream.readObject();
-                      System.out.println(Arrays.toString(questionModelList.toArray()));
+                    this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
+                    System.out.println("question model list" + questionModelList);
 
-                      transferQuestions();
 
-                    } catch (ClassNotFoundException e) {
-                      e.printStackTrace();
-                    }
-                  } catch (IOException e) {
-                    closeEverything(socket, bufferedReader, bufferedWriter);
+                  } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                   }
+                } catch (IOException e) {
+                  closeEverything(socket, bufferedReader, bufferedWriter);
                 }
               }
             })
         .start();
+
+
   }
 
-  public void transferQuestions() {
-    clientQuestionView.setQuestionModels(this.questionModelList);
+  public void transferQuestions(ClientQuestionView clientQuestionView) {
+    System.out.println("array list client " + questionModelList);
+
+
+
+
+    clientQuestionView.setQuestionModels(questionModelList);
     clientQuestionView.loadQuestionFromList(1);
   }
 
@@ -124,5 +122,13 @@ public class Client {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public List<QuestionModel> getQuestionModelList() {
+    return questionModelList;
+  }
+
+  public void setQuestionModelList(List<QuestionModel> questionModelList) {
+    this.questionModelList = questionModelList;
   }
 }
