@@ -1,5 +1,6 @@
 package com.example.jplquiz;
 
+import com.example.jplquiz.controller.ClientLoginView;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,8 +23,12 @@ public class ClientApp extends Application {
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
+
+
+
       ClientThread clientThread = new ClientThread();
       clientThread.execute();
+
     } catch (IOException e) {
       e.printStackTrace();
     }

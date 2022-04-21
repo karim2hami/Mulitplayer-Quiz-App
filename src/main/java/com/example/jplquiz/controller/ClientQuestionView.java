@@ -1,14 +1,17 @@
 package com.example.jplquiz.controller;
 
 import com.example.jplquiz.models.QuestionModel;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ClientQuestionView {
+public class ClientQuestionView implements Initializable {
 
   @FXML
   private Button btn_A;
@@ -52,10 +55,6 @@ public class ClientQuestionView {
     btn_C.setText(questionModel.getAnswerC());
     btn_D.setText(questionModel.getAnswerD());
   }
-
-
-
-
 
   // Getter and Setter
   public String getBtn_A() {
@@ -138,5 +137,10 @@ public class ClientQuestionView {
   public void setQuestionModels(
       List<QuestionModel> questionModels) {
     this.questionModels = questionModels;
+  }
+
+  @Override
+  public void initialize(URL url, ResourceBundle resourceBundle) {
+
   }
 }
