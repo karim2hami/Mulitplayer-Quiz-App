@@ -1,17 +1,14 @@
 package com.example.jplquiz.controller;
 
 import com.example.jplquiz.models.QuestionModel;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class ClientQuestionView implements Initializable {
+public class ClientQuestionView {
 
   @FXML
   private Button btn_A;
@@ -42,22 +39,18 @@ public class ClientQuestionView implements Initializable {
 
   private List<QuestionModel> questionModels;
 
-  @FXML
-  public void initialize() {
-
-  }
-
   // Methods
   @FXML
   public void loadQuestionFromList(int questionNumber) {
-    QuestionModel questionModel = questionModels.get(questionNumber);
-    System.out.println(questionModel);
 
-    lb_question.setText("Hallo");
-    btn_A.setText("Hallo");
-    btn_B.setText("Hallo");
-    btn_C.setText("Hallo");
-    btn_D.setText("Hallo");
+    QuestionModel questionModel = questionModels.get(questionNumber);
+    System.out.println("hallo" + questionModel);
+
+    lb_question.setText(questionModel.getQuestion());
+    btn_A.setText(questionModel.getAnswerA());
+    btn_B.setText(questionModel.getAnswerB());
+    btn_C.setText(questionModel.getAnswerC());
+    btn_D.setText(questionModel.getAnswerD());
   }
 
 
@@ -145,10 +138,5 @@ public class ClientQuestionView implements Initializable {
   public void setQuestionModels(
       List<QuestionModel> questionModels) {
     this.questionModels = questionModels;
-  }
-
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
-
   }
 }

@@ -90,19 +90,6 @@ public class Server{
       String answerD = data[4];
       String rightAnswer = data[5];
 
-      System.out.println(
-          " question: "
-              + question
-              + " answerA: "
-              + answerA
-              + " answerB: "
-              + answerB
-              + " answerC: "
-              + answerC
-              + " answerD: "
-              + answerD
-              + " rightAnswer: "
-              + rightAnswer);
       return new QuestionModel(question, answerA, answerB, answerC, answerD, rightAnswer);
 
     }
