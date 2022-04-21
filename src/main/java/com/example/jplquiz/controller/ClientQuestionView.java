@@ -42,19 +42,27 @@ public class ClientQuestionView implements Initializable {
 
   private List<QuestionModel> questionModels;
 
+  @FXML
+  public void initialize() {
+
+  }
+
   // Methods
   @FXML
   public void loadQuestionFromList(int questionNumber) {
-    int qNumber = questionNumber;
-    QuestionModel questionModel = questionModels.get(qNumber);
+    QuestionModel questionModel = questionModels.get(questionNumber);
     System.out.println(questionModel);
 
-    lb_question.setText(questionModel.getQuestion());
-    btn_A.setText(questionModel.getAnswerA());
-    btn_B.setText(questionModel.getAnswerB());
-    btn_C.setText(questionModel.getAnswerC());
-    btn_D.setText(questionModel.getAnswerD());
+    lb_question.setText("Hallo");
+    btn_A.setText("Hallo");
+    btn_B.setText("Hallo");
+    btn_C.setText("Hallo");
+    btn_D.setText("Hallo");
   }
+
+
+
+
 
   // Getter and Setter
   public String getBtn_A() {

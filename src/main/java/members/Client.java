@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class Client {
 
@@ -24,16 +25,14 @@ public class Client {
   private List<QuestionModel> questionModelList;
   private ClientQuestionView clientQuestionView;
 
-
-
-
   public Client(Socket socket, String userName) {
     try {
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
-      this.clientQuestionView = new ClientQuestionView();
+      clientQuestionView = new ClientQuestionView();
+      clientQuestionView.initialize();
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -105,6 +104,12 @@ public class Client {
               }
             })
         .start();
+  }
+
+  public void setupController() throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("client-questionView.fxml"));
+    ClientQuestionView controller = loader.getController();
+    controller.setBtn_D("Hello");
   }
 
   public void transferQuestions() {
