@@ -36,7 +36,7 @@ public class ClientHandler implements Runnable {
     }
   }
 
-  @Override
+  @Override // Listens for messages from the Client
   public void run() {
     String messageFromClient;
 
@@ -51,6 +51,7 @@ public class ClientHandler implements Runnable {
     }
   }
 
+  // Send a message to all clients at the same time
   public void broadcastMessage(String messageToSend) {
     for (ClientHandler clientHandler : clientHandlers) {
 
