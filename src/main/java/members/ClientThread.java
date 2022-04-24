@@ -25,7 +25,6 @@ public class ClientThread implements Runnable {
 		}
 		Client client = new Client(socket);
 		client.listenForMessage();
-		client.sendMessage();
 	}
 
 	public void execute() {
