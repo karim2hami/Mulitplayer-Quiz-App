@@ -1,5 +1,6 @@
 package com.example.jplquiz;
 
+import com.example.jplquiz.controller.ClientLoginView;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -23,8 +24,8 @@ public class ClientApp extends Application {
     try{
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
           "client-questionView.fxml"));
-      ClientQuestionView clientQuestionView = fxmlLoader.getController();
       Scene scene = new Scene(fxmlLoader.load());
+      ClientQuestionView clientQuestionView = fxmlLoader.getController();
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
@@ -47,6 +48,12 @@ public class ClientApp extends Application {
       client.transferQuestions(clientQuestionView);
 //      ClientThread clientThread = new ClientThread();
 //      clientThread.execute();
+
+
+
+      ClientThread clientThread = new ClientThread();
+      clientThread.execute();
+
     } catch (IOException e) {
       e.printStackTrace();
     } catch (InterruptedException e) {
