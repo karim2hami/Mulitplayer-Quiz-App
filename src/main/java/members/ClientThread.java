@@ -1,8 +1,9 @@
 package members;
 
+import com.example.jplquiz.controller.ClientLoginView;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
+
 
 public class ClientThread implements Runnable {
 
@@ -10,21 +11,26 @@ public class ClientThread implements Runnable {
 
 	public ClientThread() {
 		thread = new Thread(this);
-	}
 
+	}
 	@Override
 	public void run() {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Enter your username for the game: ");
-		String username = scan.nextLine();
+
+
+		ClientLoginView clientLoginView = new ClientLoginView();
+		String username = clientLoginView.getTfd_nickname();
+
 		Socket socket = null;
 		try {
 			socket = new Socket("localhost", 1234);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Client client = new Client(socket);
-		client.listenForMessage();
+
+		Client client = new Client(socket, "username");
+		client.listenForQuestions();
+		client.sendMessage();
+
 	}
 
 	public void execute() {

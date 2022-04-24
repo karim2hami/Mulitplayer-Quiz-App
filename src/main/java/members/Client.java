@@ -1,12 +1,18 @@
 package members;
 
+
+import com.example.jplquiz.controller.ClientQuestionView;
+import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.List;
+
 
 public class Client {
 
@@ -14,13 +20,16 @@ public class Client {
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
   private String userName;
+  private List<QuestionModel> questionModelList;
 
-  public Client(Socket socket) {
+
+  public Client(Socket socket, String userName) {
     try {
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
+
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -28,14 +37,11 @@ public class Client {
 
   public void sendMessage() {
     try {
-      bufferedWriter.write(userName);
-      bufferedWriter.newLine();
-      bufferedWriter.flush();
-
-      Scanner scan = new Scanner(System.in);
-      while (socket.isConnected()) {
-        String messageToSend = scan.nextLine();
+//      Scanner scan = new Scanner(System.in);
+      if (socket.isConnected()) {
+        String messageToSend = "hallo";
         bufferedWriter.write(userName + ": " + messageToSend);
+
         bufferedWriter.newLine();
         bufferedWriter.flush();
       }
@@ -65,6 +71,42 @@ public class Client {
         .start();
   }
 
+  public void listenForQuestions(){
+    new Thread(
+            () -> {
+              while (socket.isConnected()) {
+                try {
+                  InputStream inputStream = socket.getInputStream();
+                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                  try {
+
+                    this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
+                    System.out.println("question model list" + questionModelList);
+
+
+                  } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                  }
+                } catch (IOException e) {
+                  closeEverything(socket, bufferedReader, bufferedWriter);
+                }
+              }
+            })
+        .start();
+
+
+  }
+
+  public void transferQuestions(ClientQuestionView clientQuestionView) {
+    System.out.println("array list client " + questionModelList);
+
+
+
+
+    clientQuestionView.setQuestionModels(questionModelList);
+    clientQuestionView.loadQuestionFromList(1);
+  }
+
   public void closeEverything(
       Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
     try {
@@ -82,7 +124,11 @@ public class Client {
     }
   }
 
-  public void setUserName(String userName) {
-    this.userName = userName;
+  public List<QuestionModel> getQuestionModelList() {
+    return questionModelList;
+  }
+
+  public void setQuestionModelList(List<QuestionModel> questionModelList) {
+    this.questionModelList = questionModelList;
   }
 }

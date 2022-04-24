@@ -7,10 +7,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ClientHandler implements Runnable {
 
-  public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+  public static final List<ClientHandler> clientHandlers = new ArrayList<>();
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;

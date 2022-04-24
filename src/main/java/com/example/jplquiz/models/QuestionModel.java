@@ -1,52 +1,64 @@
 package com.example.jplquiz.models;
 
-public class QuestionModel {
+import java.io.Serializable;
 
-  private String questionA;
-  private String questionB;
-  private String questionC;
-  private String questionD;
+public class QuestionModel implements Serializable {
+
+  private String question;
+  private String answerA;
+  private String answerB;
+  private String answerC;
+  private String answerD;
   private String rightAnswer;
 
   public QuestionModel(
-      String questionA, String questionB, String questionC, String questionD, String rightAnswer) {
-    this.questionA = questionA;
-    this.questionB = questionB;
-    this.questionC = questionC;
-    this.questionD = questionD;
+          String question, String answerA, String answerB, String answerC, String answerD, String rightAnswer) {
+    this.question = question;
+    this.answerA = answerA;
+    this.answerB = answerB;
+    this.answerC = answerC;
+    this.answerD = answerD;
     this.rightAnswer = rightAnswer;
   }
 
-  public String getQuestionA() {
-    return questionA;
+  public String getQuestion() {
+    return question;
   }
 
-  public void setQuestionA(String questionA) {
-    this.questionA = questionA;
+  public void setQuestion(String question) {
+    this.question = question;
   }
 
-  public String getQuestionB() {
-    return questionB;
+  public String getAnswerA() {
+    return answerA;
   }
 
-  public void setQuestionB(String questionB) {
-    this.questionB = questionB;
+  public void setAnswerA(String answerA) {
+    this.answerA = answerA;
   }
 
-  public String getQuestionC() {
-    return questionC;
+  public String getAnswerB() {
+    return answerB;
   }
 
-  public void setQuestionC(String questionC) {
-    this.questionC = questionC;
+  public void setAnswerB(String answerB) {
+    this.answerB = answerB;
   }
 
-  public String getQuestionD() {
-    return questionD;
+  public String getAnswerC() {
+    return answerC;
   }
 
-  public void setQuestionD(String questionD) {
-    this.questionD = questionD;
+  public void setAnswerC(String answerC) {
+    this.answerC = answerC;
+  }
+
+  public String getAnswerD() {
+    return answerD;
+  }
+
+  public void setAnswerD(String answerD) {
+    this.answerD = answerD;
   }
 
   public String getRightAnswer() {
@@ -59,22 +71,13 @@ public class QuestionModel {
 
   @Override
   public String toString() {
-    return "QuestionModel{"
-        + "questionA='"
-        + questionA
-        + '\''
-        + ", questionB='"
-        + questionB
-        + '\''
-        + ", questionC='"
-        + questionC
-        + '\''
-        + ", questionD='"
-        + questionD
-        + '\''
-        + ", rightAnswer='"
-        + rightAnswer
-        + '\''
-        + '}';
+    return "QuestionModel{" +
+        "question='" + question + '\'' +
+        ", answerA='" + answerA + '\'' +
+        ", answerB='" + answerB + '\'' +
+        ", answerC='" + answerC + '\'' +
+        ", answerD='" + answerD + '\'' +
+        ", rightAnswer='" + rightAnswer + '\'' +
+        '}';
   }
 }
