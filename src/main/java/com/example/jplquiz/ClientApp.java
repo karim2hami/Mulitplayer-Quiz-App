@@ -23,9 +23,10 @@ public class ClientApp extends Application {
   public void start(Stage primaryStage) {
     try{
       FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-          "client-questionView.fxml"));
+          "client-loginView.fxml"));
       Scene scene = new Scene(fxmlLoader.load());
-      ClientQuestionView clientQuestionView = fxmlLoader.getController();
+      ClientLoginView clientLoginView = fxmlLoader.getController();
+//      ClientQuestionView clientQuestionView = fxmlLoader.getController();
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
@@ -40,7 +41,7 @@ public class ClientApp extends Application {
 
       Client client = new Client(socket, "devin");
       client.listenForQuestions();
-
+      /*
       System.out.println("hallo");
       client.sendMessage();
       System.out.println("hallo2");
@@ -57,6 +58,8 @@ public class ClientApp extends Application {
     } catch (IOException e) {
       e.printStackTrace();
     } catch (InterruptedException e) {
+      throw new RuntimeException(e);*/
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }

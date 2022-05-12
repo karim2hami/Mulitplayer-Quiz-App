@@ -43,6 +43,7 @@ public class ClientHandler implements Runnable {
     while (socket.isConnected()) {
       try {
         messageFromClient = bufferedReader.readLine();
+        System.out.println(clientUsername);
         broadcastMessage(messageFromClient);
       } catch (IOException e) {
         closeEverything(socket, bufferedReader, bufferedWriter);
@@ -50,6 +51,11 @@ public class ClientHandler implements Runnable {
       }
     }
   }
+
+  // Send a message to the server
+//  public void sendMessageToServer(String serverMessage) {
+//
+//  }
 
   // Send a message to all clients at the same time
   public void broadcastMessage(String messageToSend) {
