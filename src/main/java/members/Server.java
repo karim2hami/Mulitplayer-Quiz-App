@@ -20,6 +20,7 @@ public class Server{
 
   private final ServerSocket serverSocket;
   private ClientHandler clientHandler;
+  public int numberOfClients = 0;
   private List<QuestionModel> questionModelList;
 
   public Server(ServerSocket serverSocket) {
@@ -27,11 +28,16 @@ public class Server{
     this.serverSocket = serverSocket;
   }
 
+  public int transferNumberOfClients() {
+    return this.numberOfClients;
+  }
+
   public void startServer() {
     try {
       while (!serverSocket.isClosed()) {
         Socket socket = serverSocket.accept();
         System.out.println("A new Client has connected");
+        numberOfClients++;
 
         clientHandler = new ClientHandler(socket);
 
@@ -68,8 +74,6 @@ public class Server{
           }
         })
         .start();
-
-
   }
 
   public void closeServerSocket() {
