@@ -3,6 +3,8 @@ package members;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -41,10 +43,33 @@ public class Server{
         OutputStream outputStream = socket.getOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(questionModelList);
+        listenForMessages();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void listenForMessages() throws IOException {
+    Socket socket = new Socket("localhost", 1234);
+    new Thread(
+        () -> {
+          while (socket.isConnected()) {
+            try {
+              InputStream inputStream = socket.getInputStream();
+              ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+              String message = (String) objectInputStream.readObject();
+              System.out.println("Message from client: " + message);
+            } catch (IOException e) {
+              e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+              throw new RuntimeException(e);
+            }
+          }
+        })
+        .start();
+
+
   }
 
   public void closeServerSocket() {

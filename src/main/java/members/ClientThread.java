@@ -18,7 +18,7 @@ public class ClientThread implements Runnable {
 
 
 		ClientLoginView clientLoginView = new ClientLoginView();
-		String username = clientLoginView.getTfd_nickname();
+//		String username = clientLoginView.getTfd_nickname();
 
 		Socket socket = null;
 		try {
