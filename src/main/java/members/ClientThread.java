@@ -1,6 +1,6 @@
 package members;
 
-import com.example.jplquiz.controller.ClientLoginView;
+import com.example.jplquiz.ClientLoginView;
 import java.io.IOException;
 import java.net.Socket;
 
