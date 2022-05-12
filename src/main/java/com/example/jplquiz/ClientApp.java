@@ -1,17 +1,13 @@
 package com.example.jplquiz;
 
-import com.example.jplquiz.controller.ClientLoginView;
 import java.io.IOException;
 import java.net.Socket;
 
-import com.example.jplquiz.controller.ClientLoginView;
-import com.example.jplquiz.controller.ClientQuestionView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import members.Client;
-import members.ClientThread;
 
 public class ClientApp extends Application {
 
