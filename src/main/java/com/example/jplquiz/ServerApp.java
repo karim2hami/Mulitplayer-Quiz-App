@@ -15,13 +15,13 @@ public class ServerApp extends Application {
 
   @Override
   public void start(Stage primaryStage) {
-    try{
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
-          "server-clientDashboard.fxml"));
+    try {
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("server-clientDashboard.fxml"));
       Scene scene = new Scene(fxmlLoader.load());
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
+
       ServerThread serverThread = new ServerThread();
       serverThread.execute();
 
