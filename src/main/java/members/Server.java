@@ -23,7 +23,6 @@ public class Server {
   private List<QuestionModel> questionModelList;
 
   public Server(ServerSocket serverSocket) {
-
     this.serverSocket = serverSocket;
   }
 
@@ -61,10 +60,9 @@ public class Server {
             () -> {
               while (socket.isConnected()) {
                 try {
-                  //              InputStream inputStream = socket.getInputStream();
-                  //              ObjectInputStream objectInputStream = new
-                  // ObjectInputStream(inputStream);
-                  //              String message = (String) objectInputStream.readObject();
+                  // InputStream inputStream = socket.getInputStream();
+                  // ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                  // String message = (String) objectInputStream.readObject();
                   BufferedReader bufferedReader =
                       new BufferedReader(new InputStreamReader(socket.getInputStream()));
                   String message = bufferedReader.readLine();
@@ -97,17 +95,13 @@ public class Server {
 
       while (line != null) {
         String[] attributes = line.split(";");
-
         QuestionModel questionModel = createQuestionModel(attributes);
-
         questions.add(questionModel);
-
         line = bufferedReader.readLine();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
-
     questionModelList = questions;
   }
 

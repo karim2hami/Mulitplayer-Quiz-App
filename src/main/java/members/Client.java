@@ -1,6 +1,5 @@
 package members;
 
-
 import com.example.jplquiz.controller.ClientQuestionView;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
@@ -13,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.List;
 
-
 public class Client {
 
   private Socket socket;
@@ -22,14 +20,12 @@ public class Client {
   private String userName;
   private List<QuestionModel> questionModelList;
 
-
   public Client(Socket socket, String userName) {
     try {
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
-
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -40,7 +36,6 @@ public class Client {
       if (socket.isConnected()) {
         String messageToSend = "hallo";
         bufferedWriter.write(userName + ": " + messageToSend);
-
         bufferedWriter.newLine();
         bufferedWriter.flush();
       }
@@ -52,25 +47,22 @@ public class Client {
   /** listenForMessage listens to messages that are broadcasted from the ClientHandler */
   public void listenForMessage() {
     new Thread(
-            new Runnable() {
-              @Override
-              public void run() {
-                String msgFromGroupChat;
+            () -> {
+              String msgFromGroupChat;
 
-                while (socket.isConnected()) {
-                  try {
-                    msgFromGroupChat = bufferedReader.readLine();
-                    System.out.println(msgFromGroupChat);
-                  } catch (IOException e) {
-                    closeEverything(socket, bufferedReader, bufferedWriter);
-                  }
+              while (socket.isConnected()) {
+                try {
+                  msgFromGroupChat = bufferedReader.readLine();
+                  System.out.println(msgFromGroupChat);
+                } catch (IOException e) {
+                  closeEverything(socket, bufferedReader, bufferedWriter);
                 }
               }
             })
         .start();
   }
 
-  public void listenForQuestions(){
+  public void listenForQuestions() {
     new Thread(
             () -> {
               while (socket.isConnected()) {
@@ -78,11 +70,8 @@ public class Client {
                   InputStream inputStream = socket.getInputStream();
                   ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                   try {
-
                     this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
                     System.out.println("question model list" + questionModelList);
-
-
                   } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                   }
@@ -92,8 +81,6 @@ public class Client {
               }
             })
         .start();
-
-
   }
 
   public void transferQuestions(ClientQuestionView clientQuestionView) {

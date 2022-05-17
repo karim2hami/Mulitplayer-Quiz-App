@@ -34,7 +34,6 @@ public class ClientApp extends Application {
         e.printStackTrace();
       }
 
-
       Client client = new Client(socket, "devin");
       client.listenForQuestions();
       /*
