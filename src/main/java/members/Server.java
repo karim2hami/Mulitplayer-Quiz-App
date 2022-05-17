@@ -18,7 +18,6 @@ import java.util.List;
 public class Server {
 
   private final ServerSocket serverSocket;
-  private ClientHandler clientHandler;
   public int numberOfClients = 0;
   private List<QuestionModel> questionModelList;
 
@@ -37,7 +36,7 @@ public class Server {
         System.out.println("A new Client has connected");
         numberOfClients++;
 
-        clientHandler = new ClientHandler(socket);
+        ClientHandler clientHandler = new ClientHandler(socket);
 
         Thread thread = new Thread(clientHandler);
         thread.start();
@@ -75,16 +74,6 @@ public class Server {
         .start();
   }
 
-  public void closeServerSocket() {
-    try {
-      if (serverSocket != null) {
-        serverSocket.close();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
   public void readQuestions(String filename) {
     List<QuestionModel> questions = new ArrayList<>();
     Path pathToFile = Paths.get(filename);
@@ -117,5 +106,15 @@ public class Server {
       return new QuestionModel(question, answerA, answerB, answerC, answerD, rightAnswer);
     }
     return null;
+  }
+
+  public void closeServerSocket() {
+    try {
+      if (serverSocket != null) {
+        serverSocket.close();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }
