@@ -37,7 +37,6 @@ public class Client {
 
   public void sendMessage() {
     try {
-//      Scanner scan = new Scanner(System.in);
       if (socket.isConnected()) {
         String messageToSend = "hallo";
         bufferedWriter.write(userName + ": " + messageToSend);
@@ -98,13 +97,9 @@ public class Client {
   }
 
   public void transferQuestions(ClientQuestionView clientQuestionView) {
-    System.out.println("array list client " + questionModelList);
-
-
-
-
+    System.out.println("array list client: " + questionModelList);
     clientQuestionView.setQuestionModels(questionModelList);
-    clientQuestionView.loadQuestionFromList(1);
+    clientQuestionView.loadQuestionFromList();
   }
 
   public void closeEverything(
