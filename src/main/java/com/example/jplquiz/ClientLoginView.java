@@ -1,9 +1,8 @@
 package com.example.jplquiz;
 
-import com.example.jplquiz.controller.ClientQuestionView;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,7 +16,8 @@ import javafx.stage.Stage;
 
 public class ClientLoginView implements Initializable {
 
-  Socket socket;
+  private Socket socket;
+  private BufferedWriter bufferedWriter;
 
   @FXML private Button btn_enter;
 
@@ -29,25 +29,31 @@ public class ClientLoginView implements Initializable {
         actionEvent -> {
           String nickName = tfd_nickname.getText();
           System.out.println("New player: " + nickName);
-          try {
-            System.out.println("Trying to connect to server...");
-            socket = new Socket("localhost", 1234);
-            OutputStream outputStream = socket.getOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            System.out.println("Trying to send nickname to server...");
-            objectOutputStream.writeObject(nickName);
-            System.out.println("Success!");
-            System.out.println("Changing to Clientquestionview...");
-            changeToClientQuestionView();
-          } catch (IOException e) {
-            e.printStackTrace();
-          }
+          sendNickName(nickName);
         });
   }
 
   @FXML
+  void sendNickName(String nickName) {
+    try {
+      System.out.println("Trying to connect to server...");
+      socket = new Socket("localhost", 1234);
+      bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+      System.out.println("Trying to send nickname to server...");
+      bufferedWriter.write(nickName);
+      bufferedWriter.newLine();
+      bufferedWriter.flush();
+      System.out.println("Success!");
+      System.out.println("Changing to Clientquestionview...");
+      changeToClientQuestionView();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
   void changeToClientQuestionView() {
-    try{
+    try {
       Stage stage = new Stage();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("client-questionView.fxml"));
       Scene scene = new Scene(loader.load());

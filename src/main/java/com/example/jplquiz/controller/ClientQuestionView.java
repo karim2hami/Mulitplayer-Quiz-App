@@ -4,6 +4,9 @@ import com.example.jplquiz.models.QuestionModel;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,36 +16,80 @@ import javafx.scene.image.ImageView;
 
 public class ClientQuestionView implements Initializable {
 
-  @FXML
-  private Button btn_A;
+  @FXML private Button btn_A;
 
-  @FXML
-  private Button btn_B;
+  @FXML private Button btn_B;
 
-  @FXML
-  private Button btn_C;
+  @FXML private Button btn_C;
 
-  @FXML
-  private Button btn_D;
+  @FXML private Button btn_D;
 
-  @FXML
-  private ImageView img_question;
+  @FXML private ImageView img_question;
 
-  @FXML
-  private Label lb_countDown;
+  @FXML private Label lb_countDown;
 
-  @FXML
-  private Label lb_playerPoints;
+  @FXML private Label lb_playerPoints;
 
-  @FXML
-  private Label lb_question;
+  @FXML private Label lb_question;
 
-  @FXML
-  private Label lb_questionCounter;
+  @FXML private Label lb_questionCounter;
 
   private List<QuestionModel> questionModels;
 
+  private String rightAnswer;
+
   // Methods
+  @Override
+  public void initialize(URL url, ResourceBundle resourceBundle) {
+    // initialize Timer
+    countDownTimer();
+
+    btn_A.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button A was pressed...");
+          // Validate value
+          if (btn_A.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+          } else {
+            System.out.println("WRONG ANSWER...");
+          }
+          // return value to server
+        });
+    btn_B.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button B was pressed...");
+          // Validate value
+          if (btn_B.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+          } else {
+            System.out.println("WRONG ANSWER...");
+          }
+          // return value to server
+        });
+    btn_C.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button C was pressed...");
+          // Validate value
+          if (btn_C.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+          } else {
+            System.out.println("WRONG ANSWER...");
+          }
+          // return value to server
+        });
+    btn_D.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button D was pressed...");
+          // Validate value
+          if (btn_D.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+          } else {
+            System.out.println("WRONG ANSWER...");
+          }
+          // return value to server
+        });
+  }
+
   @FXML
   public void loadQuestionFromList(int questionNumber) {
 
@@ -54,6 +101,28 @@ public class ClientQuestionView implements Initializable {
     btn_B.setText(questionModel.getAnswerB());
     btn_C.setText(questionModel.getAnswerC());
     btn_D.setText(questionModel.getAnswerD());
+    rightAnswer = questionModel.getRightAnswer();
+  }
+
+  @FXML
+  public void countDownTimer() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(
+        new TimerTask() {
+          int count = 31;
+
+          @Override
+          public void run() {
+            if (count > 0) {
+              Platform.runLater(() -> lb_countDown.setText(String.valueOf(count)));
+              count--;
+            } else {
+              timer.cancel();
+            }
+          }
+        },
+        0,
+        1000);
   }
 
   // Getter and Setter
@@ -94,8 +163,8 @@ public class ClientQuestionView implements Initializable {
   }
 
   public void setImg_question(String img_path) {
-    this.img_question.setImage(new Image(String.valueOf(
-        getClass().getResource("../icons/" + img_path + ".png"))));
+    this.img_question.setImage(
+        new Image(String.valueOf(getClass().getResource("../icons/" + img_path + ".png"))));
   }
 
   public String getLb_countDown() {
@@ -134,13 +203,7 @@ public class ClientQuestionView implements Initializable {
     return questionModels;
   }
 
-  public void setQuestionModels(
-      List<QuestionModel> questionModels) {
+  public void setQuestionModels(List<QuestionModel> questionModels) {
     this.questionModels = questionModels;
-  }
-
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
-
   }
 }
