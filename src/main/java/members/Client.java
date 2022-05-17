@@ -101,8 +101,6 @@ public class Client {
     System.out.println("array list client " + questionModelList);
 
 
-
-
     clientQuestionView.setQuestionModels(questionModelList);
     clientQuestionView.loadQuestionFromList(1);
   }
