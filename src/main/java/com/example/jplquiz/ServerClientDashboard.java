@@ -33,7 +33,7 @@ public class ServerClientDashboard implements Initializable {
 
   public void createNodeFromItem() {
     try{
-      for(int i = 0; i < 10; i++) {
+      for(int i = 0; i < 5; i++) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("client-nickNameItem.fxml"));
         Node node = fxmlLoader.load();
