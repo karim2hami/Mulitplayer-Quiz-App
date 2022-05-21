@@ -15,6 +15,7 @@ public class ClientThread implements Runnable {
 
   @Override
   public void run() {
+
     ClientQuestionView clientQuestionView = new ClientQuestionView();
 
     try {
@@ -26,9 +27,6 @@ public class ClientThread implements Runnable {
     Client client = new Client(socket, "TestClient");
     System.out.println("Client listening for questions...");
     client.listenForQuestions();
-
-    System.out.println("Client sending message...");
-    client.sendMessage();
 
     System.out.println("Client transfering questions to controller...");
     client.transferQuestions(clientQuestionView);
