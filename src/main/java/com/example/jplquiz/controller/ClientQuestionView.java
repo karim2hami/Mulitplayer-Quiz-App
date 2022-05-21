@@ -38,7 +38,7 @@ public class ClientQuestionView implements Initializable {
 
   @FXML private Label lb_questionCounter;
 
-  private List<QuestionModel> questionModels;
+  private List<QuestionModel> questionModels = new ArrayList<>();
 
   private List<Boolean> answers = new ArrayList<>();
 
@@ -57,6 +57,7 @@ public class ClientQuestionView implements Initializable {
   // Methods
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+    System.out.println("Questions received in ClientQuestionView: " + questionModels.toString());
     // initialize Timer
     countDownTimer();
 
@@ -162,8 +163,8 @@ public class ClientQuestionView implements Initializable {
 
   @FXML
   public void loadQuestionFromList() {
-
     if (questionsNumber < questionModels.size()) {
+      System.out.println("Loading next Question...");
       QuestionModel questionModel = questionModels.get(questionsNumber);
       System.out.println("Current questionModel: " + questionModel);
 
@@ -177,9 +178,10 @@ public class ClientQuestionView implements Initializable {
       questionsNumber++;
       countDownTimer();
     } else {
-      System.out.println("All questions answered, game finished...");
+      System.out.println("Game finished...");
+      System.out.println("All questions answered...");
       // send answers back to server...
-      System.out.println("Sending all answers to Server");
+      System.out.println("Sending all answers to Server...");
       sendAnswersToServer();
     }
   }

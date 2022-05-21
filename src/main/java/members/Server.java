@@ -25,28 +25,21 @@ public class Server {
     this.serverSocket = serverSocket;
   }
 
-  public int transferNumberOfClients() {
-    return this.numberOfClients;
-  }
-
   public void startServer() {
     try {
       while (!serverSocket.isClosed()) {
-        Socket socket = serverSocket.accept();
-        System.out.println("A new Client has connected");
-        numberOfClients++;
+        if(serverSocket.accept() != null) {
+          Socket socket = serverSocket.accept();
+          System.out.println("A new Client has connected");
+          numberOfClients++;
+          listenForMessages();
 
-        ClientHandler clientHandler = new ClientHandler(socket);
+          readQuestions("src/main/resources/Questions/Questions.csv");
 
-        Thread thread = new Thread(clientHandler);
-        thread.start();
-
-        readQuestions("src/main/resources/Questions/Questions.csv");
-
-        OutputStream outputStream = socket.getOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-        objectOutputStream.writeObject(questionModelList);
-        listenForMessages();
+          OutputStream outputStream = socket.getOutputStream();
+          ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+          objectOutputStream.writeObject(questionModelList);
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -59,13 +52,11 @@ public class Server {
             () -> {
               while (socket.isConnected()) {
                 try {
-                  // InputStream inputStream = socket.getInputStream();
-                  // ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                  // String message = (String) objectInputStream.readObject();
                   BufferedReader bufferedReader =
                       new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                  String message = bufferedReader.readLine();
-                  System.out.println("Message from client: " + message);
+                  String nickName = bufferedReader.readLine();
+                  nicknameList.add(nickName);
+                  System.out.println("Player nickName: " + nickName);
                 } catch (IOException e) {
                   e.printStackTrace();
                 }

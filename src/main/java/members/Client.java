@@ -31,37 +31,6 @@ public class Client {
     }
   }
 
-  public void sendMessage() {
-    try {
-      if (socket.isConnected()) {
-        String messageToSend = "hallo";
-        bufferedWriter.write(userName + ": " + messageToSend);
-        bufferedWriter.newLine();
-        bufferedWriter.flush();
-      }
-    } catch (IOException e) {
-      closeEverything(socket, bufferedReader, bufferedWriter);
-    }
-  }
-
-  /** listenForMessage listens to messages that are broadcasted from the ClientHandler */
-  public void listenForMessage() {
-    new Thread(
-            () -> {
-              String msgFromGroupChat;
-
-              while (socket.isConnected()) {
-                try {
-                  msgFromGroupChat = bufferedReader.readLine();
-                  System.out.println(msgFromGroupChat);
-                } catch (IOException e) {
-                  closeEverything(socket, bufferedReader, bufferedWriter);
-                }
-              }
-            })
-        .start();
-  }
-
   // Listen for Question models from Server
   public void listenForQuestions() {
     new Thread(

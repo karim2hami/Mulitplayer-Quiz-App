@@ -8,6 +8,8 @@ import members.ClientThread;
 
 public class ClientApp extends Application {
 
+  Socket socket = null;
+
   public static void main(String[] args) {
     launch(args);
   }
