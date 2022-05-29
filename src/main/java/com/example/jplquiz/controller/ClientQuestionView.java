@@ -48,7 +48,7 @@ public class ClientQuestionView implements Initializable {
 
   private int correctAnswers = 0;
 
-  private int questionsNumber = 0;
+  private int questionsNumber = 1;
 
   private String rightAnswer;
 
@@ -164,9 +164,9 @@ public class ClientQuestionView implements Initializable {
   public void loadQuestionFromList() {
 
     if (questionsNumber < questionModels.size()) {
+
       QuestionModel questionModel = questionModels.get(questionsNumber);
       System.out.println("Current questionModel: " + questionModel);
-
       lb_question.setText(questionModel.getQuestion());
       btn_A.setText(questionModel.getAnswerA());
       btn_B.setText(questionModel.getAnswerB());
@@ -174,8 +174,9 @@ public class ClientQuestionView implements Initializable {
       btn_D.setText(questionModel.getAnswerD());
       rightAnswer = questionModel.getRightAnswer();
 
-      questionsNumber++;
+
       countDownTimer();
+      questionsNumber++;
     } else {
       System.out.println("All questions answered, game finished...");
       // send answers back to server...

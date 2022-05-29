@@ -20,6 +20,8 @@ public class Client {
   private String userName;
   private List<QuestionModel> questionModelList;
 
+  private boolean ready = false;
+
   public Client(Socket socket, String userName) {
     try {
       this.socket = socket;
@@ -74,6 +76,10 @@ public class Client {
                   try {
                     this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
                     System.out.println("question model list" + questionModelList);
+                    if(questionModelList.size() >= 1){
+                      this.ready = true;
+                    }
+
                   } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                   }
@@ -90,7 +96,10 @@ public class Client {
 
 
     clientQuestionView.setQuestionModels(questionModelList);
-    clientQuestionView.loadQuestionFromList(1);
+    if(questionModelList != null){
+      clientQuestionView.loadQuestionFromList();
+    }
+
   }
 
   public void closeEverything(
@@ -116,5 +125,10 @@ public class Client {
 
   public void setQuestionModelList(List<QuestionModel> questionModelList) {
     this.questionModelList = questionModelList;
+  }
+
+
+  public boolean isReady() {
+    return ready;
   }
 }

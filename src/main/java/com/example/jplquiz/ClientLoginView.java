@@ -19,6 +19,8 @@ public class ClientLoginView implements Initializable {
   private Socket socket;
   private BufferedWriter bufferedWriter;
 
+  private boolean ready = false;
+
   @FXML private Button btn_enter;
 
   @FXML private TextField tfd_nickname;
@@ -29,6 +31,7 @@ public class ClientLoginView implements Initializable {
         actionEvent -> {
           String nickName = tfd_nickname.getText();
           System.out.println("New player: " + nickName);
+          ready = true;
           sendNickName(nickName);
         });
   }
@@ -69,5 +72,14 @@ public class ClientLoginView implements Initializable {
     Stage clientLoginView = (Stage) btn_enter.getScene().getWindow();
     clientLoginView.close();
     System.out.println("Closed clientLoginView!");
+  }
+
+
+  public boolean isReady() {
+    return ready;
+  }
+
+  public void setReady(boolean ready) {
+    this.ready = ready;
   }
 }
