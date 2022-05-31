@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.List;
+import javafx.fxml.FXMLLoader;
 
 public class Client {
 
@@ -20,6 +21,8 @@ public class Client {
   private String userName;
   private List<QuestionModel> questionModelList;
 
+  private ClientQuestionView clientQuestionView;
+
   private boolean ready = false;
 
   public Client(Socket socket, String userName) {
@@ -28,6 +31,7 @@ public class Client {
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
+
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -69,13 +73,14 @@ public class Client {
   public void listenForQuestions() {
     new Thread(
             () -> {
-              while (socket.isConnected()) {
+              while (questionModelList == null) {
                 try {
                   InputStream inputStream = socket.getInputStream();
                   ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                   try {
                     this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
-                    System.out.println("question model list" + questionModelList);
+                    System.out.println("Question model list" + questionModelList);
+
                     if(questionModelList.size() >= 1){
                       this.ready = true;
                     }
@@ -91,7 +96,7 @@ public class Client {
         .start();
   }
 
-  public void transferQuestions(ClientQuestionView clientQuestionView) {
+  public void transferQuestions() {
     System.out.println("array list client " + questionModelList);
 
 
@@ -120,6 +125,7 @@ public class Client {
   }
 
   public List<QuestionModel> getQuestionModelList() {
+    System.out.println("Hallo " + questionModelList);
     return questionModelList;
   }
 
@@ -127,8 +133,11 @@ public class Client {
     this.questionModelList = questionModelList;
   }
 
+  public ClientQuestionView getClientQuestionView() {
+    return clientQuestionView;
+  }
 
-  public boolean isReady() {
-    return ready;
+  public void setClientQuestionView(ClientQuestionView clientQuestionView) {
+    this.clientQuestionView = clientQuestionView;
   }
 }

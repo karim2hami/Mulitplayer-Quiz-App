@@ -5,20 +5,28 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import members.Client;
 
 public class ClientLoginView implements Initializable {
 
   private Socket socket;
   private BufferedWriter bufferedWriter;
 
+  private Client client;
+
+
+  private FXMLLoader questionListLoader;
   private boolean ready = false;
 
   @FXML private Button btn_enter;
@@ -27,6 +35,10 @@ public class ClientLoginView implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    questionListLoader = new FXMLLoader(getClass().getResource("client-questionView.fxml"));
+
+
     btn_enter.setOnAction(
         actionEvent -> {
           String nickName = tfd_nickname.getText();
@@ -58,14 +70,15 @@ public class ClientLoginView implements Initializable {
   void changeToClientQuestionView() {
     try {
       Stage stage = new Stage();
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("client-questionView.fxml"));
-      Scene scene = new Scene(loader.load());
-
+      Scene scene = new Scene(questionListLoader.load());
+//      System.out.println("client question view" + questionListLoader.getController());
+      client.setClientQuestionView(questionListLoader.getController());
+      client.listenForQuestions();
       stage.setScene(scene);
       stage.setResizable(false);
       stage.setTitle("Multiplayer Quiz App");
       stage.show();
-      System.out.println("Opened Clientquestionview");
+      client.transferQuestions();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -74,12 +87,11 @@ public class ClientLoginView implements Initializable {
     System.out.println("Closed clientLoginView!");
   }
 
-
-  public boolean isReady() {
-    return ready;
+  public Client getClient() {
+    return client;
   }
 
-  public void setReady(boolean ready) {
-    this.ready = ready;
+  public void setClient(Client client) {
+    this.client = client;
   }
 }
