@@ -3,14 +3,10 @@ package com.example.jplquiz;
 import com.example.jplquiz.controller.ClientNickNameItem;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,15 +37,7 @@ public class ServerClientDashboard implements Initializable {
 
     observableList.addListener(
         ((InvalidationListener)
-            observable -> {
-              Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                  createNodeFromItem();
-                }
-              });
-
-            }));
+            observable -> Platform.runLater(this::createNodeFromItem)));
   }
 
   public void createNodeFromItem() {
