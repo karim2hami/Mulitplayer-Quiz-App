@@ -1,5 +1,6 @@
 package members;
 
+import com.example.jplquiz.ServerClientDashboard;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +26,8 @@ public class Server {
   private List<QuestionModel> questionModelList;
 
   private List<String> listOfClients;
+
+  private ServerClientDashboard serverClientDashboard;
 
 
   public Server(ServerSocket serverSocket) {
@@ -60,9 +63,10 @@ public class Server {
                 try {
                   BufferedReader bufferedReader =
                       new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                  String message = bufferedReader.readLine();
-                  listOfClients.add(message);
-                  System.out.println(message);
+                  String name = bufferedReader.readLine();
+                  listOfClients.add(name);
+                  serverClientDashboard.addName(name);
+                  System.out.println(name);
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
@@ -113,5 +117,10 @@ public class Server {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+
+  public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
+    this.serverClientDashboard = serverClientDashboard;
   }
 }
