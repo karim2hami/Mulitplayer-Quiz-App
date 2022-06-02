@@ -39,7 +39,6 @@ public class Client {
 
   public void sendMessage() {
     try {
-//      Scanner scan = new Scanner(System.in);
       if (socket.isConnected()) {
         String messageToSend = "hallo";
         bufferedWriter.write(userName + ": " + messageToSend);
@@ -79,11 +78,6 @@ public class Client {
                   ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                   try {
                     this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
-                    System.out.println("Question model list" + questionModelList);
-
-                    if(questionModelList.size() >= 1){
-                      this.ready = true;
-                    }
 
                   } catch (ClassNotFoundException e) {
                     e.printStackTrace();
@@ -100,6 +94,7 @@ public class Client {
     System.out.println("array list client " + questionModelList);
 
 
+    clientQuestionView.setSocket(socket);
     clientQuestionView.setQuestionModels(questionModelList);
     if(questionModelList != null){
       clientQuestionView.loadQuestionFromList();
@@ -140,4 +135,5 @@ public class Client {
   public void setClientQuestionView(ClientQuestionView clientQuestionView) {
     this.clientQuestionView = clientQuestionView;
   }
+
 }

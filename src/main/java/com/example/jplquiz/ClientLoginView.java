@@ -42,25 +42,20 @@ public class ClientLoginView implements Initializable {
     btn_enter.setOnAction(
         actionEvent -> {
           String nickName = tfd_nickname.getText();
-          System.out.println("New player: " + nickName);
           ready = true;
           sendNickName(nickName);
+          changeToClientQuestionView();
         });
   }
 
   @FXML
   void sendNickName(String nickName) {
     try {
-      System.out.println("Trying to connect to server...");
-      socket = new Socket("localhost", 1234);
       bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-      System.out.println("Trying to send nickname to server...");
       bufferedWriter.write(nickName);
       bufferedWriter.newLine();
       bufferedWriter.flush();
-      System.out.println("Success!");
-      System.out.println("Changing to Clientquestionview...");
-      changeToClientQuestionView();
+
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -84,7 +79,6 @@ public class ClientLoginView implements Initializable {
     }
     Stage clientLoginView = (Stage) btn_enter.getScene().getWindow();
     clientLoginView.close();
-    System.out.println("Closed clientLoginView!");
   }
 
   public Client getClient() {
@@ -93,5 +87,13 @@ public class ClientLoginView implements Initializable {
 
   public void setClient(Client client) {
     this.client = client;
+  }
+
+  public Socket getSocket() {
+    return socket;
+  }
+
+  public void setSocket(Socket socket) {
+    this.socket = socket;
   }
 }

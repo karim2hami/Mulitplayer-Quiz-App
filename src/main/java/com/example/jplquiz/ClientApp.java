@@ -41,10 +41,7 @@ public class ClientApp extends Application {
 
       Client client = new Client(socket, "TestClient");
       clientLoginView.setClient(client);
-
-
-
-
+      clientLoginView.setSocket(socket);
 
 
     } catch (IOException e) {

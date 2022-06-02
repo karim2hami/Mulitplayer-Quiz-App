@@ -13,11 +13,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Server {
 
   private final ServerSocket serverSocket;
+
+  private Socket socket;
   public int numberOfClients = 0;
   private List<QuestionModel> questionModelList;
 
@@ -33,8 +36,7 @@ public class Server {
   public void startServer() {
     try {
       while (!serverSocket.isClosed()) {
-        Socket socket = serverSocket.accept();
-        listenForMessages();
+        socket = serverSocket.accept();
         System.out.println("A new Client has connected");
         numberOfClients++;
 
@@ -43,6 +45,8 @@ public class Server {
         OutputStream outputStream = socket.getOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(questionModelList);
+
+        listenForMessages();
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -50,16 +54,15 @@ public class Server {
   }
 
   public void listenForMessages() throws IOException {
-    Socket socket = new Socket("localhost", 1234);
     new Thread(
             () -> {
-              while (socket.isConnected()) {
+              while (!socket.isClosed()) {
                 try {
                   BufferedReader bufferedReader =
                       new BufferedReader(new InputStreamReader(socket.getInputStream()));
                   String message = bufferedReader.readLine();
                   listOfClients.add(message);
-                  System.out.println(listOfClients);
+                  System.out.println(message);
                 } catch (IOException e) {
                   e.printStackTrace();
                 }

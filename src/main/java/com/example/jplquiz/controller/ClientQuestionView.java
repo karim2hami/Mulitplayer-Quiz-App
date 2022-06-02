@@ -42,6 +42,8 @@ public class ClientQuestionView implements Initializable {
 
   private List<Boolean> answers = new ArrayList<>();
 
+  private Socket socket;
+
   private int playerScore = 0;
 
   private int falseAnswers = 0;
@@ -140,10 +142,7 @@ public class ClientQuestionView implements Initializable {
   @FXML
   public void sendAnswersToServer() {
     try {
-      Socket socket = new Socket("localhost", 1234);
-      System.out.println("Opened new Socket on localhost and port 1234");
       OutputStream outputStream = socket.getOutputStream();
-      System.out.println("Initialized new Outputstream");
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
       objectOutputStream.writeObject(answers);
       System.out.println("Sending of answers completed!");
@@ -166,7 +165,6 @@ public class ClientQuestionView implements Initializable {
     if (questionsNumber < questionModels.size()) {
 
       QuestionModel questionModel = questionModels.get(questionsNumber);
-      System.out.println("Current questionModel: " + questionModel);
       lb_question.setText(questionModel.getQuestion());
       btn_A.setText(questionModel.getAnswerA());
       btn_B.setText(questionModel.getAnswerB());
@@ -290,5 +288,9 @@ public class ClientQuestionView implements Initializable {
 
   public void setQuestionModels(List<QuestionModel> questionModels) {
     this.questionModels = questionModels;
+  }
+
+  public void setSocket(Socket socket) {
+    this.socket = socket;
   }
 }

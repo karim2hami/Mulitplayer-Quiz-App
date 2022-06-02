@@ -3,6 +3,7 @@ package com.example.jplquiz;
 import com.example.jplquiz.controller.ClientNickNameItem;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,8 @@ public class ServerClientDashboard implements Initializable {
 
   private int playerCounter;
 
+  private  List<String> listOfClients;
+
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     createNodeFromItem();
@@ -47,5 +50,9 @@ public class ServerClientDashboard implements Initializable {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void setListOfClients(List<String> listOfClients){
+    this.listOfClients = listOfClients;
   }
 }
