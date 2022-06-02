@@ -5,7 +5,8 @@ import java.net.ServerSocket;
 
 public class ServerThread implements Runnable {
 
-	private Thread thread;
+	private final Thread thread;
+	ServerSocket serverSocket = null;
 
 	public ServerThread() {
 		thread = new Thread(this);
@@ -13,7 +14,6 @@ public class ServerThread implements Runnable {
 
 	@Override
 	public void run() {
-		ServerSocket serverSocket = null;
 		try {
 			serverSocket = new ServerSocket(1234);
 		} catch (IOException e) {

@@ -1,9 +1,16 @@
 package com.example.jplquiz.controller;
 
 import com.example.jplquiz.models.QuestionModel;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,47 +20,193 @@ import javafx.scene.image.ImageView;
 
 public class ClientQuestionView implements Initializable {
 
-  @FXML
-  private Button btn_A;
+  @FXML private Button btn_A;
 
-  @FXML
-  private Button btn_B;
+  @FXML private Button btn_B;
 
-  @FXML
-  private Button btn_C;
+  @FXML private Button btn_C;
 
-  @FXML
-  private Button btn_D;
+  @FXML private Button btn_D;
 
-  @FXML
-  private ImageView img_question;
+  @FXML private ImageView img_question;
 
-  @FXML
-  private Label lb_countDown;
+  @FXML private Label lb_countDown;
 
-  @FXML
-  private Label lb_playerPoints;
+  @FXML private Label lb_playerPoints;
 
-  @FXML
-  private Label lb_question;
+  @FXML private Label lb_question;
 
-  @FXML
-  private Label lb_questionCounter;
+  @FXML private Label lb_questionCounter;
 
   private List<QuestionModel> questionModels;
 
+  private List<Boolean> answers = new ArrayList<>();
+
+  private int playerScore = 0;
+
+  private int falseAnswers = 0;
+
+  private int correctAnswers = 0;
+
+  private int questionsNumber = 0;
+
+  private String rightAnswer;
+
+  private boolean game = true;
+
   // Methods
+  @Override
+  public void initialize(URL url, ResourceBundle resourceBundle) {
+    // initialize Timer
+    countDownTimer();
+
+    btn_A.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button A was pressed...");
+          game = false;
+          // Validate value
+          if (btn_A.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+            answers.add(true);
+            correctAnswers++;
+            playerScore += 100;
+          } else {
+            System.out.println("WRONG ANSWER...");
+            answers.add(false);
+            falseAnswers++;
+          }
+          // loadNewQuestion
+          loadQuestionFromList();
+        });
+
+    btn_B.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button B was pressed...");
+          game = false;
+          // Validate value
+          if (btn_B.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+            answers.add(true);
+            correctAnswers++;
+            playerScore += 100;
+          } else {
+            System.out.println("WRONG ANSWER...");
+            answers.add(false);
+            falseAnswers++;
+          }
+          // loadNewQuestion
+          loadQuestionFromList();
+        });
+
+    btn_C.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button C was pressed...");
+          game = false;
+          // Validate value
+          if (btn_C.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+            answers.add(true);
+            correctAnswers++;
+            playerScore += 100;
+          } else {
+            System.out.println("WRONG ANSWER...");
+            answers.add(false);
+            falseAnswers++;
+          }
+          // loadNewQuestion
+          loadQuestionFromList();
+        });
+
+    btn_D.setOnMouseClicked(
+        actionEvent -> {
+          System.out.println("Button D was pressed...");
+          game = false;
+          // Validate value
+          if (btn_D.getText().equals(rightAnswer)) {
+            System.out.println("Right Answer!");
+            answers.add(true);
+            correctAnswers++;
+            playerScore += 100;
+          } else {
+            System.out.println("WRONG ANSWER...");
+            answers.add(false);
+            falseAnswers++;
+          }
+          // loadNewQuestion
+          loadQuestionFromList();
+        });
+  }
+
   @FXML
-  public void loadQuestionFromList(int questionNumber) {
+  public void sendAnswersToServer() {
+    try {
+      Socket socket = new Socket("localhost", 1234);
+      System.out.println("Opened new Socket on localhost and port 1234");
+      OutputStream outputStream = socket.getOutputStream();
+      System.out.println("Initialized new Outputstream");
+      ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+      objectOutputStream.writeObject(answers);
+      System.out.println("Sending of answers completed!");
+      socket.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("Sending of Answers failed");
+    }
+  }
 
-    QuestionModel questionModel = questionModels.get(questionNumber);
-    System.out.println("hallo" + questionModel);
+  @FXML
+  public void updateScore() {
+    lb_playerPoints.setText(String.valueOf(playerScore));
+    lb_questionCounter.setText(String.valueOf(questionsNumber + 1));
+  }
 
-    lb_question.setText(questionModel.getQuestion());
-    btn_A.setText(questionModel.getAnswerA());
-    btn_B.setText(questionModel.getAnswerB());
-    btn_C.setText(questionModel.getAnswerC());
-    btn_D.setText(questionModel.getAnswerD());
+  @FXML
+  public void loadQuestionFromList() {
+
+    if (questionsNumber < questionModels.size()) {
+      QuestionModel questionModel = questionModels.get(questionsNumber);
+      System.out.println("Current questionModel: " + questionModel);
+
+      lb_question.setText(questionModel.getQuestion());
+      btn_A.setText(questionModel.getAnswerA());
+      btn_B.setText(questionModel.getAnswerB());
+      btn_C.setText(questionModel.getAnswerC());
+      btn_D.setText(questionModel.getAnswerD());
+      rightAnswer = questionModel.getRightAnswer();
+
+      questionsNumber++;
+      countDownTimer();
+    } else {
+      System.out.println("All questions answered, game finished...");
+      // send answers back to server...
+      System.out.println("Sending all answers to Server");
+      sendAnswersToServer();
+    }
+  }
+
+  @FXML
+  public void countDownTimer() {
+    Timer timer = new Timer();
+    timer.scheduleAtFixedRate(
+        new TimerTask() {
+          int count = 31;
+
+          @Override
+          public void run() {
+            if (game) {
+              if (count > 0) {
+                Platform.runLater(() -> lb_countDown.setText(String.valueOf(count)));
+                count--;
+              } else {
+                timer.cancel();
+              }
+            } else {
+              timer.cancel();
+            }
+          }
+        },
+        0,
+        1000);
   }
 
   // Getter and Setter
@@ -94,8 +247,8 @@ public class ClientQuestionView implements Initializable {
   }
 
   public void setImg_question(String img_path) {
-    this.img_question.setImage(new Image(String.valueOf(
-        getClass().getResource("../icons/" + img_path + ".png"))));
+    this.img_question.setImage(
+        new Image(String.valueOf(getClass().getResource("../icons/" + img_path + ".png"))));
   }
 
   public String getLb_countDown() {
@@ -134,13 +287,7 @@ public class ClientQuestionView implements Initializable {
     return questionModels;
   }
 
-  public void setQuestionModels(
-      List<QuestionModel> questionModels) {
+  public void setQuestionModels(List<QuestionModel> questionModels) {
     this.questionModels = questionModels;
-  }
-
-  @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
-
   }
 }

@@ -26,7 +26,6 @@ public class Client {
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
-
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
@@ -34,11 +33,9 @@ public class Client {
 
   public void sendMessage() {
     try {
-      //      Scanner scan = new Scanner(System.in);
       if (socket.isConnected()) {
         String messageToSend = "hallo";
         bufferedWriter.write(userName + ": " + messageToSend);
-
         bufferedWriter.newLine();
         bufferedWriter.flush();
       }
@@ -50,24 +47,22 @@ public class Client {
   /** listenForMessage listens to messages that are broadcasted from the ClientHandler */
   public void listenForMessage() {
     new Thread(
-            new Runnable() {
-              @Override
-              public void run() {
-                String msgFromGroupChat;
+            () -> {
+              String msgFromGroupChat;
 
-                while (socket.isConnected()) {
-                  try {
-                    msgFromGroupChat = bufferedReader.readLine();
-                    System.out.println(msgFromGroupChat);
-                  } catch (IOException e) {
-                    closeEverything(socket, bufferedReader, bufferedWriter);
-                  }
+              while (socket.isConnected()) {
+                try {
+                  msgFromGroupChat = bufferedReader.readLine();
+                  System.out.println(msgFromGroupChat);
+                } catch (IOException e) {
+                  closeEverything(socket, bufferedReader, bufferedWriter);
                 }
               }
             })
         .start();
   }
 
+  // Listen for Question models from Server
   public void listenForQuestions() {
     new Thread(
             () -> {
@@ -76,10 +71,8 @@ public class Client {
                   InputStream inputStream = socket.getInputStream();
                   ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                   try {
-
                     this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
                     System.out.println("question model list" + questionModelList);
-
                   } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                   }
@@ -92,10 +85,9 @@ public class Client {
   }
 
   public void transferQuestions(ClientQuestionView clientQuestionView) {
-    System.out.println("array list client " + questionModelList);
-
+    System.out.println("array list client: " + questionModelList);
     clientQuestionView.setQuestionModels(questionModelList);
-    clientQuestionView.loadQuestionFromList(1);
+    clientQuestionView.loadQuestionFromList();
   }
 
   public void closeEverything(

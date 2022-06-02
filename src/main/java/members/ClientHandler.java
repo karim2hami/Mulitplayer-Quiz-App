@@ -19,9 +19,9 @@ public class ClientHandler implements Runnable {
 
   /**
    * @param socket
-   *     <p>Client Handler that is responsible for communication with Client and Server
-   *     <p>OutputStream is wrapped with BufferWriter for sending characters and not bytes same is
-   *     for InputStream
+   *     <Client Handler that is responsible for communication with Client and Server
+   *     <OutputStream is wrapped with BufferWriter for sending characters and not bytes same is
+   *     <for InputStream
    */
   public ClientHandler(Socket socket) {
     try {
@@ -51,11 +51,6 @@ public class ClientHandler implements Runnable {
       }
     }
   }
-
-  // Send a message to the server
-//  public void sendMessageToServer(String serverMessage) {
-//
-//  }
 
   // Send a message to all clients at the same time
   public void broadcastMessage(String messageToSend) {
