@@ -1,17 +1,12 @@
 package com.example.jplquiz;
 
-import com.example.jplquiz.ClientLoginView;
-import com.example.jplquiz.controller.ClientQuestionView;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Objects;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import members.Client;
-import members.ClientThread;
 
 public class ClientApp extends Application {
 
@@ -32,18 +27,20 @@ public class ClientApp extends Application {
       primaryStage.show();
       ClientLoginView clientLoginView = fxmlLoaderStart.getController();
 
-      try {
-        socket = new Socket("localhost", 1234);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
+      setupSocket();
 
       Client client = new Client(socket, "TestClient");
       clientLoginView.setClient(client);
       clientLoginView.setSocket(socket);
 
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
+  public void setupSocket() {
+    try {
+      socket = new Socket("localhost", 1234);
     } catch (IOException e) {
       e.printStackTrace();
     }

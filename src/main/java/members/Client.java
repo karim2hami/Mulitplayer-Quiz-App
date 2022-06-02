@@ -11,7 +11,6 @@ import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.List;
-import javafx.fxml.FXMLLoader;
 
 public class Client {
 
@@ -22,8 +21,6 @@ public class Client {
   private List<QuestionModel> questionModelList;
 
   private ClientQuestionView clientQuestionView;
-
-  private boolean ready = false;
 
   public Client(Socket socket, String userName) {
     try {
@@ -51,22 +48,6 @@ public class Client {
   }
 
   /** listenForMessage listens to messages that are broadcasted from the ClientHandler */
-  public void listenForMessage() {
-    new Thread(
-            () -> {
-              String msgFromGroupChat;
-
-              while (socket.isConnected()) {
-                try {
-                  msgFromGroupChat = bufferedReader.readLine();
-                  System.out.println(msgFromGroupChat);
-                } catch (IOException e) {
-                  closeEverything(socket, bufferedReader, bufferedWriter);
-                }
-              }
-            })
-        .start();
-  }
 
   // Listen for Question models from Server
   public void listenForQuestions() {
@@ -76,18 +57,23 @@ public class Client {
                 try {
                   InputStream inputStream = socket.getInputStream();
                   ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                  try {
-                    this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
 
-                  } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                  }
+                  readObjectForQuestion(objectInputStream);
                 } catch (IOException e) {
                   closeEverything(socket, bufferedReader, bufferedWriter);
                 }
               }
             })
         .start();
+  }
+
+  public void readObjectForQuestion(ObjectInputStream objectInputStream){
+    try {
+      this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
+
+    } catch (ClassNotFoundException | IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void transferQuestions() {
@@ -117,19 +103,6 @@ public class Client {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  public List<QuestionModel> getQuestionModelList() {
-    System.out.println("Hallo " + questionModelList);
-    return questionModelList;
-  }
-
-  public void setQuestionModelList(List<QuestionModel> questionModelList) {
-    this.questionModelList = questionModelList;
-  }
-
-  public ClientQuestionView getClientQuestionView() {
-    return clientQuestionView;
   }
 
   public void setClientQuestionView(ClientQuestionView clientQuestionView) {
