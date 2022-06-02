@@ -1,6 +1,5 @@
 package members;
 
-
 import com.example.jplquiz.controller.ClientQuestionView;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
@@ -13,7 +12,6 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.List;
 
-
 public class Client {
 
   private Socket socket;
@@ -21,7 +19,6 @@ public class Client {
   private BufferedWriter bufferedWriter;
   private String userName;
   private List<QuestionModel> questionModelList;
-
 
   public Client(Socket socket, String userName) {
     try {
@@ -37,7 +34,7 @@ public class Client {
 
   public void sendMessage() {
     try {
-//      Scanner scan = new Scanner(System.in);
+      //      Scanner scan = new Scanner(System.in);
       if (socket.isConnected()) {
         String messageToSend = "hallo";
         bufferedWriter.write(userName + ": " + messageToSend);
@@ -71,7 +68,7 @@ public class Client {
         .start();
   }
 
-  public void listenForQuestions(){
+  public void listenForQuestions() {
     new Thread(
             () -> {
               while (socket.isConnected()) {
@@ -83,7 +80,6 @@ public class Client {
                     this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
                     System.out.println("question model list" + questionModelList);
 
-
                   } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                   }
@@ -93,15 +89,10 @@ public class Client {
               }
             })
         .start();
-
-
   }
 
   public void transferQuestions(ClientQuestionView clientQuestionView) {
     System.out.println("array list client " + questionModelList);
-
-
-
 
     clientQuestionView.setQuestionModels(questionModelList);
     clientQuestionView.loadQuestionFromList(1);
