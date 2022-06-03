@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Server {
@@ -40,23 +39,22 @@ public class Server {
     try {
       while (!serverSocket.isClosed()) {
         socket = serverSocket.accept();
-        System.out.println("A new Client has connected");
         numberOfClients++;
-
         readQuestions("src/main/resources/Questions/Questions.csv");
 
         OutputStream outputStream = socket.getOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(questionModelList);
 
-        listenForMessages();
+        serverClientDashboard.setSocket(socket);
+        listenforNames();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  public void listenForMessages() throws IOException {
+  public void listenforNames() throws IOException {
     new Thread(
             () -> {
               while (!socket.isClosed()) {

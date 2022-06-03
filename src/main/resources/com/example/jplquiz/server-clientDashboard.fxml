@@ -63,7 +63,7 @@
                     <Insets left="150.0" right="150.0" />
                   </HBox.margin>
                 </StackPane>
-                <Button fx:id="btn_start" mnemonicParsing="false" style="-fx-background-color: #E1E1E1;" text="Start">
+                <Button fx:id="btnStart" mnemonicParsing="false" style="-fx-background-color: #E1E1E1;" text="Start">
                   <font>
                     <Font size="24.0" />
                   </font></Button>

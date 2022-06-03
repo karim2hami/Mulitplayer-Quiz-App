@@ -32,6 +32,7 @@ public class ClientApp extends Application {
       Client client = new Client(socket, "TestClient");
       clientLoginView.setClient(client);
       clientLoginView.setSocket(socket);
+      clientLoginView.listenForStart();
 
     } catch (IOException e) {
       e.printStackTrace();

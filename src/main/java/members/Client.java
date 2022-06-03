@@ -57,7 +57,6 @@ public class Client {
                 try {
                   InputStream inputStream = socket.getInputStream();
                   ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-
                   readObjectForQuestion(objectInputStream);
                 } catch (IOException e) {
                   closeEverything(socket, bufferedReader, bufferedWriter);
@@ -70,7 +69,7 @@ public class Client {
   public void readObjectForQuestion(ObjectInputStream objectInputStream){
     try {
       this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
-
+      System.out.println(questionModelList);
     } catch (ClassNotFoundException | IOException e) {
       e.printStackTrace();
     }
@@ -109,4 +108,8 @@ public class Client {
     this.clientQuestionView = clientQuestionView;
   }
 
+  public void setQuestionModelList(
+      List<QuestionModel> questionModelList) {
+    this.questionModelList = questionModelList;
+  }
 }
