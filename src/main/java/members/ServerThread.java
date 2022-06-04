@@ -23,8 +23,10 @@ public class ServerThread implements Runnable {
 			e.printStackTrace();
 		}
 		Server server = new Server(serverSocket);
+		serverClientDashboard.setServer(server);
 		server.setServerClientDashboard(serverClientDashboard);
 		server.startServer();
+
 
 	}
 

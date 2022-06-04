@@ -1,11 +1,9 @@
 package com.example.jplquiz;
 
 import com.example.jplquiz.controller.ClientNickNameItem;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -21,12 +19,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import members.Server;
 
 public class ServerClientDashboard implements Initializable {
 
   @FXML private Button btnStart;
 
-  @FXML private Label lb_playerCounter;
+  @FXML private Label lbPlayerCounter;
 
   @FXML private HBox playerItemsHbox;
 
@@ -37,6 +36,10 @@ public class ServerClientDashboard implements Initializable {
   private ArrayList<String> tempNameList;
 
   private Socket socket;
+
+  private Server server;
+
+  private boolean isStart = false;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -50,6 +53,7 @@ public class ServerClientDashboard implements Initializable {
     btnStart.setOnAction(
         actionEvent -> {
           sendStart();
+
         });
 
     observableList.addListener(
@@ -69,7 +73,7 @@ public class ServerClientDashboard implements Initializable {
           clientNickNameItem.setItemName(name);
           playerItemsHbox.getChildren().add(node);
           playerCounter++;
-          lb_playerCounter.setText(String.valueOf(playerCounter));
+          lbPlayerCounter.setText(String.valueOf(playerCounter));
         }
         tempNameList.clear();
       } catch (IOException e) {
@@ -78,11 +82,12 @@ public class ServerClientDashboard implements Initializable {
     }
   }
 
-
   @FXML
   void sendStart() {
     try {
-      if(socket.isConnected()){
+      if (socket.isConnected()) {
+        server.getListenForNamesThread().interrupt();
+        isStart = true;
         OutputStream outputStream = socket.getOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(true);
@@ -93,12 +98,22 @@ public class ServerClientDashboard implements Initializable {
   }
 
   public void addName(String name) {
-    tempNameList.add(name);
-    observableList.add(name);
+    if(isStart == false){
+      tempNameList.add(name);
+      observableList.add(name);
+    }
     System.out.println(observableList);
   }
 
   public void setSocket(Socket socket) {
     this.socket = socket;
+  }
+
+  public boolean isStart() {
+    return isStart;
+  }
+
+  public void setServer(Server server) {
+    this.server = server;
   }
 }

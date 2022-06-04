@@ -83,7 +83,6 @@ public class ClientLoginView implements Initializable {
       Stage stage = new Stage();
       Scene scene = new Scene(questionListLoader.load());
       client.setClientQuestionView(questionListLoader.getController());
-      client.listenForQuestions();
       stage.setScene(scene);
       stage.setResizable(false);
       stage.setTitle("Multiplayer Quiz App");
@@ -115,6 +114,7 @@ public class ClientLoginView implements Initializable {
                           this::changeToClientQuestionView);
 
                       System.out.println("isStart = " + true);
+                      Thread.currentThread().interrupt();
                     }
                   } catch (ClassNotFoundException | IOException e) {
                     e.printStackTrace();

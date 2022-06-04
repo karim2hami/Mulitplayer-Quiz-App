@@ -28,6 +28,8 @@ public class Server {
 
   private ServerClientDashboard serverClientDashboard;
 
+  private Thread listenForNamesThread;
+
 
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
@@ -47,30 +49,32 @@ public class Server {
         objectOutputStream.writeObject(questionModelList);
 
         serverClientDashboard.setSocket(socket);
-        listenforNames();
+        listenForNames();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  public void listenforNames() throws IOException {
-    new Thread(
+  public void listenForNames() {
+    listenForNamesThread = new Thread(
             () -> {
-              while (!socket.isClosed()) {
+              while (!socket.isClosed() && !serverClientDashboard.isStart() && !listenForNamesThread.isInterrupted()) {
                 try {
+                  System.out.println(serverClientDashboard.isStart());
                   BufferedReader bufferedReader =
                       new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                  String name = bufferedReader.readLine();
-                  listOfClients.add(name);
-                  serverClientDashboard.addName(name);
-                  System.out.println(name);
+                  Object object = bufferedReader.readLine();
+                  listOfClients.add(String.valueOf(object));
+                  serverClientDashboard.addName(String.valueOf(object));
+
+                  System.out.println(object);
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
               }
-            })
-        .start();
+            });
+    listenForNamesThread.start();
   }
 
   public void readQuestions(String filename) {
@@ -120,5 +124,9 @@ public class Server {
 
   public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
     this.serverClientDashboard = serverClientDashboard;
+  }
+
+  public Thread getListenForNamesThread() {
+    return listenForNamesThread;
   }
 }

@@ -30,7 +30,7 @@
                           <image>
                             <Image url="@../../../icons/Person.png" />
                           </image></ImageView>
-                        <Label fx:id="lb_playerCounter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="49.0" text="0" textFill="WHITE">
+                        <Label fx:id="lbPlayerCounter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="49.0" text="0" textFill="WHITE">
                           <font>
                             <Font size="32.0" />
                           </font>
