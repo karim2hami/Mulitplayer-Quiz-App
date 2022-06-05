@@ -110,8 +110,7 @@ public class ClientLoginView implements Initializable {
                       index++;
                     } else {
                       isStart = true;
-                      Platform.runLater(
-                          this::changeToClientQuestionView);
+                      Platform.runLater(this::changeToClientQuestionView);
 
                       System.out.println("isStart = " + true);
                       Thread.currentThread().interrupt();

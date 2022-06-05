@@ -66,7 +66,7 @@ public class Client {
         .start();
   }
 
-  public void readObjectForQuestion(ObjectInputStream objectInputStream){
+  public void readObjectForQuestion(ObjectInputStream objectInputStream) {
     try {
       this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
       System.out.println(questionModelList);
@@ -78,13 +78,11 @@ public class Client {
   public void transferQuestions() {
     System.out.println("array list client " + questionModelList);
 
-
     clientQuestionView.setSocket(socket);
     clientQuestionView.setQuestionModels(questionModelList);
-    if(questionModelList != null){
+    if (questionModelList != null) {
       clientQuestionView.loadQuestionFromList();
     }
-
   }
 
   public void closeEverything(
@@ -108,8 +106,7 @@ public class Client {
     this.clientQuestionView = clientQuestionView;
   }
 
-  public void setQuestionModelList(
-      List<QuestionModel> questionModelList) {
+  public void setQuestionModelList(List<QuestionModel> questionModelList) {
     this.questionModelList = questionModelList;
   }
 }

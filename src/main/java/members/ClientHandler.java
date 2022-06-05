@@ -18,8 +18,7 @@ public class ClientHandler implements Runnable {
   private String clientUsername;
 
   /**
-   * @param socket
-   *     <Client Handler that is responsible for communication with Client and Server
+   * @param socket <Client Handler that is responsible for communication with Client and Server
    *     <OutputStream is wrapped with BufferWriter for sending characters and not bytes same is
    *     <for InputStream
    */

@@ -6,35 +6,33 @@ import java.net.ServerSocket;
 
 public class ServerThread implements Runnable {
 
-	private final Thread thread;
-	ServerSocket serverSocket = null;
+  private final Thread thread;
+  ServerSocket serverSocket = null;
 
-	private ServerClientDashboard serverClientDashboard;
+  private ServerClientDashboard serverClientDashboard;
 
-	public ServerThread() {
-		thread = new Thread(this);
-	}
+  public ServerThread() {
+    thread = new Thread(this);
+  }
 
-	@Override
-	public void run() {
-		try {
-			serverSocket = new ServerSocket(1234);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Server server = new Server(serverSocket);
-		serverClientDashboard.setServer(server);
-		server.setServerClientDashboard(serverClientDashboard);
-		server.startServer();
+  @Override
+  public void run() {
+    try {
+      serverSocket = new ServerSocket(1234);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Server server = new Server(serverSocket);
+    serverClientDashboard.setServer(server);
+    server.setServerClientDashboard(serverClientDashboard);
+    server.startServer();
+  }
 
+  public void execute() {
+    thread.start();
+  }
 
-	}
-
-	public void execute() {
-		thread.start();
-	}
-
-	public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
-		this.serverClientDashboard = serverClientDashboard;
-	}
+  public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
+    this.serverClientDashboard = serverClientDashboard;
+  }
 }

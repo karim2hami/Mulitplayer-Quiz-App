@@ -17,6 +17,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
+/**
+ * @author devinhasler ClientQuestionView: Controller Class of client-questionView.fxml Displays the
+ *     game and questions to the player Handles Validataion of the players answers Sends the players
+ *     score back to the server.
+ */
+@SuppressWarnings("DuplicatedCode")
 public class ClientQuestionView implements Initializable {
 
   @FXML private Button btnA;
@@ -55,6 +61,17 @@ public class ClientQuestionView implements Initializable {
 
   private Timer timer;
 
+  /**
+   * @author karimtouhami Method initialize is overrides the method from the Initializable Interface
+   *     of the javafx.fxml package. The method is called to initialize the ClientQuestionView
+   *     Controller after its root element has been completely processed.
+   *     <p>Initialize a Timer object Add all event listeneners to the GUI buttons
+   * @param url - The location used to resolve relative paths for the root object, or null if the
+   *     location is not known.
+   * @param resourceBundle - The resources are used to localize the root object, or null if the root
+   *     object was not localized.
+   */
+
   // Methods
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -62,6 +79,7 @@ public class ClientQuestionView implements Initializable {
     timer = new Timer();
     countDownTimer();
 
+    // initialize all buttons and their corresponding event listeners
     btnA.setOnMouseClicked(
         actionEvent -> {
           System.out.println("Button A was pressed...");
@@ -77,9 +95,10 @@ public class ClientQuestionView implements Initializable {
             answers.add(false);
             falseAnswers++;
           }
-          // loadNewQuestion
+          // Stop Timer and initialize a new one
           timer.cancel();
           timer = new Timer();
+          // loadNewQuestion
           loadQuestionFromList();
         });
 
@@ -98,9 +117,10 @@ public class ClientQuestionView implements Initializable {
             answers.add(false);
             falseAnswers++;
           }
-          // loadNewQuestion
+          // Stop Timer and initialize a new one
           timer.cancel();
           timer = new Timer();
+          // loadNewQuestion
           loadQuestionFromList();
         });
 
@@ -119,9 +139,10 @@ public class ClientQuestionView implements Initializable {
             answers.add(false);
             falseAnswers++;
           }
-          // loadNewQuestion
+          // Stop Timer and initialize a new one
           timer.cancel();
           timer = new Timer();
+          // loadNewQuestion
           loadQuestionFromList();
         });
 
@@ -140,12 +161,18 @@ public class ClientQuestionView implements Initializable {
             answers.add(false);
             falseAnswers++;
           }
-          // loadNewQuestion
+          // Stop Timer and initialize a new one
           timer.cancel();
           timer = new Timer();
+          // loadNewQuestion
           loadQuestionFromList();
         });
   }
+
+  /**
+   * @author devinhasler
+   * Sets up an Outputstream of type object and writes the answers of the user to the stream.
+   */
 
   @FXML
   public void sendAnswersToServer() {

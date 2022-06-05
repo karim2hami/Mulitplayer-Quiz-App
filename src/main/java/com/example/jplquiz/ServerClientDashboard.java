@@ -51,10 +51,7 @@ public class ServerClientDashboard implements Initializable {
     createNodeFromItem();
 
     btnStart.setOnAction(
-        actionEvent -> {
-          sendStart();
-
-        });
+        actionEvent -> sendStart());
 
     observableList.addListener(
         ((InvalidationListener) observable -> Platform.runLater(this::createNodeFromItem)));
@@ -98,7 +95,7 @@ public class ServerClientDashboard implements Initializable {
   }
 
   public void addName(String name) {
-    if(isStart == false){
+    if (!isStart) {
       tempNameList.add(name);
       observableList.add(name);
     }

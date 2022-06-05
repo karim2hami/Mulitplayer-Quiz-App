@@ -30,12 +30,10 @@ public class Server {
 
   private Thread listenForNamesThread;
 
-
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
     this.listOfClients = new ArrayList<>();
   }
-
 
   public void startServer() {
     try {
@@ -57,9 +55,12 @@ public class Server {
   }
 
   public void listenForNames() {
-    listenForNamesThread = new Thread(
+    listenForNamesThread =
+        new Thread(
             () -> {
-              while (!socket.isClosed() && !serverClientDashboard.isStart() && !listenForNamesThread.isInterrupted()) {
+              while (!socket.isClosed()
+                  && !serverClientDashboard.isStart()
+                  && !listenForNamesThread.isInterrupted()) {
                 try {
                   System.out.println(serverClientDashboard.isStart());
                   BufferedReader bufferedReader =
@@ -120,7 +121,6 @@ public class Server {
       e.printStackTrace();
     }
   }
-
 
   public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
     this.serverClientDashboard = serverClientDashboard;
