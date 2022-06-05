@@ -15,135 +15,153 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * @author devinhasler ClientQuestionView: Controller Class of client-questionView.fxml Displays the
+ *     game and questions to the player Handles Validataion of the players answers Sends the players
+ *     score back to the server.
+ */
+@SuppressWarnings("DuplicatedCode")
 public class ClientQuestionView implements Initializable {
 
-  @FXML private Button btn_A;
-
-  @FXML private Button btn_B;
-
-  @FXML private Button btn_C;
-
-  @FXML private Button btn_D;
-
-  @FXML private ImageView img_question;
-
-  @FXML private Label lb_countDown;
-
-  @FXML private Label lb_playerPoints;
-
-  @FXML private Label lb_question;
-
-  @FXML private Label lb_questionCounter;
+  @FXML private Button btnA;
+  @FXML private Button btnB;
+  @FXML private Button btnC;
+  @FXML private Button btnD;
+  @FXML private ImageView imgQuestion;
+  @FXML private Label lbCountDown;
+  @FXML private Label lbPlayerPoints;
+  @FXML private Label lbQuestion;
+  @FXML private Label lbQuestionCounter;
 
   private List<QuestionModel> questionModels;
-
-  private List<Boolean> answers = new ArrayList<>();
-
+  private final List<Boolean> answers = new ArrayList<>();
+  private Socket socket;
   private int playerScore = 0;
-
   private int falseAnswers = 0;
-
   private int correctAnswers = 0;
-
-  private int questionsNumber = 0;
-
+  private int questionsNumber = 1;
   private String rightAnswer;
+  private Timer timer;
 
-  private boolean game = true;
+  private static final String RIGHT_ANSWER = "Right Answer!";
+  private static final String WRONG_ANSWER = "WRONG ANSWER...";
 
-  // Methods
+  /**
+   * @author karimtouhami Method initialize overrides the method from the Initializable Interface of
+   *     the javafx.fxml package. The method is called to initialize the ClientQuestionView
+   *     Controller after its root element has been completely processed.
+   *     <p>Initialize a Timer object Add all event listeneners to the GUI buttons
+   * @param url - The location used to resolve relative paths for the root object, or null if the
+   *     location is not known.
+   * @param resourceBundle - The resources are used to localize the root object, or null if the root
+   *     object was not localized.
+   */
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // initialize Timer
+    timer = new Timer();
     countDownTimer();
 
-    btn_A.setOnMouseClicked(
+    // initialize all buttons and their corresponding event listeners
+    btnA.setOnMouseClicked(
         actionEvent -> {
           System.out.println("Button A was pressed...");
-          game = false;
           // Validate value
-          if (btn_A.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+          if (btnA.getText().equals(rightAnswer)) {
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
-            playerScore += 100;
+            playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
+            lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
+          // Stop Timer and initialize a new one
+          timer.cancel();
+          timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
         });
 
-    btn_B.setOnMouseClicked(
+    btnB.setOnMouseClicked(
         actionEvent -> {
           System.out.println("Button B was pressed...");
-          game = false;
           // Validate value
-          if (btn_B.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+          if (btnB.getText().equals(rightAnswer)) {
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
-            playerScore += 100;
+            playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
+            lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
+          // Stop Timer and initialize a new one
+          timer.cancel();
+          timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
         });
 
-    btn_C.setOnMouseClicked(
+    btnC.setOnMouseClicked(
         actionEvent -> {
           System.out.println("Button C was pressed...");
-          game = false;
           // Validate value
-          if (btn_C.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+          if (btnC.getText().equals(rightAnswer)) {
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
-            playerScore += 100;
+            playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
+            lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
+          // Stop Timer and initialize a new one
+          timer.cancel();
+          timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
         });
 
-    btn_D.setOnMouseClicked(
+    btnD.setOnMouseClicked(
         actionEvent -> {
           System.out.println("Button D was pressed...");
-          game = false;
           // Validate value
-          if (btn_D.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+          if (btnD.getText().equals(rightAnswer)) {
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
-            playerScore += 100;
+            playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
+            lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
+          // Stop Timer and initialize a new one
+          timer.cancel();
+          timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
         });
   }
 
+  /**
+   * @author devinhasler sendAnswersToServer: Sets up an Outputstream of type object and writes the
+   *     answers of the user to the stream.
+   */
   @FXML
   public void sendAnswersToServer() {
     try {
-      Socket socket = new Socket("localhost", 1234);
-      System.out.println("Opened new Socket on localhost and port 1234");
       OutputStream outputStream = socket.getOutputStream();
-      System.out.println("Initialized new Outputstream");
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
       objectOutputStream.writeObject(answers);
       System.out.println("Sending of answers completed!");
@@ -154,28 +172,27 @@ public class ClientQuestionView implements Initializable {
     }
   }
 
-  @FXML
-  public void updateScore() {
-    lb_playerPoints.setText(String.valueOf(playerScore));
-    lb_questionCounter.setText(String.valueOf(questionsNumber + 1));
-  }
-
+  /**
+   * @author karimtouhami loadQuestionFromList: Loads one question element out of the List
+   *     questionModels, updates the GUI, starts a new countdown timer, increments the
+   *     questioncounter.
+   */
   @FXML
   public void loadQuestionFromList() {
 
     if (questionsNumber < questionModels.size()) {
+      lbQuestionCounter.setText((questionsNumber) + " von " + (questionModels.size()-1));
       QuestionModel questionModel = questionModels.get(questionsNumber);
-      System.out.println("Current questionModel: " + questionModel);
-
-      lb_question.setText(questionModel.getQuestion());
-      btn_A.setText(questionModel.getAnswerA());
-      btn_B.setText(questionModel.getAnswerB());
-      btn_C.setText(questionModel.getAnswerC());
-      btn_D.setText(questionModel.getAnswerD());
+      lbQuestion.setText(questionModel.getQuestion());
+      btnA.setText(questionModel.getAnswerA());
+      btnB.setText(questionModel.getAnswerB());
+      btnC.setText(questionModel.getAnswerC());
+      btnD.setText(questionModel.getAnswerD());
       rightAnswer = questionModel.getRightAnswer();
 
-      questionsNumber++;
       countDownTimer();
+      questionsNumber++;
+
     } else {
       System.out.println("All questions answered, game finished...");
       // send answers back to server...
@@ -184,22 +201,23 @@ public class ClientQuestionView implements Initializable {
     }
   }
 
+  /**
+   * @author karimtouhami countDownTimer: Sets up a new TimerTask of a fixed rate of 1 second to
+   *     count down from 31 and updates the counter in the GUI.
+   */
   @FXML
   public void countDownTimer() {
-    Timer timer = new Timer();
+    System.out.println(timer);
     timer.scheduleAtFixedRate(
         new TimerTask() {
           int count = 31;
 
           @Override
           public void run() {
-            if (game) {
-              if (count > 0) {
-                Platform.runLater(() -> lb_countDown.setText(String.valueOf(count)));
-                count--;
-              } else {
-                timer.cancel();
-              }
+
+            if (count > 0) {
+              Platform.runLater(() -> lbCountDown.setText(String.valueOf(count)));
+              count--;
             } else {
               timer.cancel();
             }
@@ -209,85 +227,11 @@ public class ClientQuestionView implements Initializable {
         1000);
   }
 
-  // Getter and Setter
-  public String getBtn_A() {
-    return btn_A.getText();
-  }
-
-  public void setBtn_A(String btn_A) {
-    this.btn_A.setText(btn_A);
-  }
-
-  public String getBtn_B() {
-    return btn_B.getText();
-  }
-
-  public void setBtn_B(String btn_B) {
-    this.btn_B.setText(btn_B);
-  }
-
-  public String getBtn_C() {
-    return btn_C.getText();
-  }
-
-  public void setBtn_C(String btn_C) {
-    this.btn_C.setText(btn_C);
-  }
-
-  public String getBtn_D() {
-    return btn_D.getText();
-  }
-
-  public void setBtn_D(String btn_D) {
-    this.btn_D.setText(btn_D);
-  }
-
-  public Image getImg_question() {
-    return img_question.getImage();
-  }
-
-  public void setImg_question(String img_path) {
-    this.img_question.setImage(
-        new Image(String.valueOf(getClass().getResource("../icons/" + img_path + ".png"))));
-  }
-
-  public String getLb_countDown() {
-    return lb_countDown.getText();
-  }
-
-  public void setLb_countDown(String lb_countDown) {
-    this.lb_countDown.setText(lb_countDown);
-  }
-
-  public String getLb_playerPoints() {
-    return lb_playerPoints.getText();
-  }
-
-  public void setLb_playerPoints(String lb_playerPoints) {
-    this.lb_playerPoints.setText(lb_playerPoints);
-  }
-
-  public Label getLb_question() {
-    return lb_question;
-  }
-
-  public void setLb_question(String lb_question) {
-    this.lb_question.setText(lb_question);
-  }
-
-  public String getLb_questionCounter() {
-    return lb_questionCounter.getText();
-  }
-
-  public void setLb_questionCounter(String lb_questionCounter) {
-    this.lb_questionCounter.setText(lb_questionCounter);
-  }
-
-  public List<QuestionModel> getQuestionModels() {
-    return questionModels;
-  }
-
   public void setQuestionModels(List<QuestionModel> questionModels) {
     this.questionModels = questionModels;
+  }
+
+  public void setSocket(Socket socket) {
+    this.socket = socket;
   }
 }

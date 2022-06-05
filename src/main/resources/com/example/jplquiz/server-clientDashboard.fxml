@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.jplquiz.ServerClientDashboard">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.jplquiz.ServerClientDashboard">
   <children>
     <BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #612CB9;">
       <center>
@@ -30,7 +30,7 @@
                           <image>
                             <Image url="@../../../icons/Person.png" />
                           </image></ImageView>
-                        <Label fx:id="lb_playerCounter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="49.0" text="0" textFill="WHITE">
+                        <Label fx:id="lbPlayerCounter" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="49.0" prefWidth="49.0" text="0" textFill="WHITE">
                           <font>
                             <Font size="32.0" />
                           </font>
@@ -63,7 +63,7 @@
                     <Insets left="150.0" right="150.0" />
                   </HBox.margin>
                 </StackPane>
-                <Button fx:id="btn_start" mnemonicParsing="false" style="-fx-background-color: #E1E1E1;" text="Start">
+                <Button fx:id="btnStart" mnemonicParsing="false" style="-fx-background-color: #E1E1E1;" text="Start">
                   <font>
                     <Font size="24.0" />
                   </font></Button>
@@ -72,7 +72,7 @@
                 <Insets left="30.0" right="30.0" />
               </VBox.margin>
             </HBox>
-            <HBox fx:id="playerItemsHbox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" />
+            <HBox fx:id="playerItemsBox" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" />
           </children>
         </VBox>
       </center>

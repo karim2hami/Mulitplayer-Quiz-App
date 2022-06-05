@@ -2,6 +2,10 @@ package com.example.jplquiz.models;
 
 import java.io.Serializable;
 
+/**
+ * @author karimtouhami QuestionModel: Sets up a new QuestionModel, when the questions are loaded
+ *     from the .csv file and adds the questionModel objects to a list.
+ */
 public class QuestionModel implements Serializable {
 
   private String question;
@@ -12,7 +16,12 @@ public class QuestionModel implements Serializable {
   private String rightAnswer;
 
   public QuestionModel(
-          String question, String answerA, String answerB, String answerC, String answerD, String rightAnswer) {
+      String question,
+      String answerA,
+      String answerB,
+      String answerC,
+      String answerD,
+      String rightAnswer) {
     this.question = question;
     this.answerA = answerA;
     this.answerB = answerB;
@@ -71,13 +80,25 @@ public class QuestionModel implements Serializable {
 
   @Override
   public String toString() {
-    return "QuestionModel{" +
-        "question='" + question + '\'' +
-        ", answerA='" + answerA + '\'' +
-        ", answerB='" + answerB + '\'' +
-        ", answerC='" + answerC + '\'' +
-        ", answerD='" + answerD + '\'' +
-        ", rightAnswer='" + rightAnswer + '\'' +
-        '}';
+    return "QuestionModel{"
+        + "question='"
+        + question
+        + '\''
+        + ", answerA='"
+        + answerA
+        + '\''
+        + ", answerB='"
+        + answerB
+        + '\''
+        + ", answerC='"
+        + answerC
+        + '\''
+        + ", answerD='"
+        + answerD
+        + '\''
+        + ", rightAnswer='"
+        + rightAnswer
+        + '\''
+        + '}';
   }
 }
