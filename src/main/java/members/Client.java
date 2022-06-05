@@ -12,6 +12,12 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.List;
 
+/**
+ * @author karimtouhami
+ *     <p>Client: Class handling the connection between server and client, and transfers the
+ *     received questions from the server to the ClientQuestionView GUI.
+ */
+@SuppressWarnings("DuplicatedCode")
 public class Client {
 
   private Socket socket;
@@ -21,6 +27,12 @@ public class Client {
   private List<QuestionModel> questionModelList;
   private ClientQuestionView clientQuestionView;
 
+  /**
+   * @author karimtouhami
+   *     <p>Constructes a new Client instance with a Socket and userName.
+   * @param socket - connection Socket running on port "localhost:1234".
+   * @param userName - userName of the client.
+   */
   public Client(Socket socket, String userName) {
     try {
       this.socket = socket;
@@ -45,9 +57,10 @@ public class Client {
     }
   }
 
-  /** listenForMessage listens to messages that are broadcasted from the ClientHandler */
-
-  // Listen for Question models from Server
+  /**
+   * @author devinhasler
+   *     <p>Listens for messages that are broadcasted from the ClientHandler.
+   */
   public void listenForQuestions() {
     new Thread(
             () -> {
@@ -64,6 +77,12 @@ public class Client {
         .start();
   }
 
+  /**
+   * @author karimtouhami
+   *     <p>Reads the questions from the objectinputstream and converts them into a List of
+   *     Questionmodels.
+   * @param objectInputStream - Stream of received question objects.
+   */
   public void readObjectForQuestion(ObjectInputStream objectInputStream) {
     try {
       this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
@@ -73,9 +92,13 @@ public class Client {
     }
   }
 
+  /**
+   * @author devinhasler
+   *     <p>Transfers the list of questionmodels to the ClientQuestionView GUI, which are then
+   *     stored as a variable.
+   */
   public void transferQuestions() {
-    System.out.println("array list client " + questionModelList);
-
+    System.out.println("ArrayList client " + questionModelList);
     clientQuestionView.setSocket(socket);
     clientQuestionView.setQuestionModels(questionModelList);
     if (questionModelList != null) {
@@ -83,6 +106,14 @@ public class Client {
     }
   }
 
+  /**
+   * Handles the open and running connection ports and closes them all at once, when not needed
+   * anymore.
+   *
+   * @param socket - Socket object to be closed.
+   * @param bufferedReader - BufferedReader object to be closed.
+   * @param bufferedWriter - BufferedWriter object to be closed.
+   */
   public void closeEverything(
       Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
     try {

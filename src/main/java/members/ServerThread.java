@@ -4,11 +4,15 @@ import com.example.jplquiz.ServerClientDashboard;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+/**
+ * @author karimtouhami
+ *     <p>ServerThread: Initializes a new Server and ServerSocket instance and executes them in a
+ *     seperate Thread.
+ */
 public class ServerThread implements Runnable {
 
   private final Thread thread;
-  ServerSocket serverSocket = null;
-
+  private ServerSocket serverSocket = null;
   private ServerClientDashboard serverClientDashboard;
 
   public ServerThread() {

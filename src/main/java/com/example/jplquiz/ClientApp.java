@@ -22,13 +22,11 @@ public class ClientApp extends Application {
   }
 
   /**
-   * @author karimtouhami
-   * Loads client-loginView.fxml into the GUI and sets up a new client instance.
-   *
-   * <p>start(): The main entry point for all JavaFX applications. The start method is called after
-   * * the init method has returned, and after the system is ready for the application to begin
-   * running.
-   *
+   * @author karimtouhami Loads client-loginView.fxml into the GUI and sets up a new client
+   *     instance.
+   *     <p>start(): The main entry point for all JavaFX applications. The start method is called
+   *     after * the init method has returned, and after the system is ready for the application to
+   *     begin running.
    * @param primaryStage - the primary stage for this application, onto which the application scene
    *     * is set.
    */
@@ -55,6 +53,11 @@ public class ClientApp extends Application {
     }
   }
 
+  /**
+   * @author karimtouhami
+   *     <p>Sets up a new Socket instance for communication between Server and Client on port
+   *     "localhost:1234".
+   */
   public void setupSocket() {
     try {
       socket = new Socket("localhost", 1234);

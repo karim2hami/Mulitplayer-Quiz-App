@@ -16,18 +16,20 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author karimtouhami
+ *     <p>Server: Class starting the server instance, reading in the questions from the .csv file up
+ *     the connection between server and client, and transfers the received questions from the
+ *     server to the ClientQuestionView GUI.
+ */
 public class Server {
 
   private final ServerSocket serverSocket;
-
   private Socket socket;
-  public int numberOfClients = 0;
+  private int numberOfClients = 0;
   private List<QuestionModel> questionModelList;
-
   private List<String> listOfClients;
-
   private ServerClientDashboard serverClientDashboard;
-
   private Thread listenForNamesThread;
 
   public Server(ServerSocket serverSocket) {
@@ -35,6 +37,12 @@ public class Server {
     this.listOfClients = new ArrayList<>();
   }
 
+  /**
+   * @author devinhasler
+   *     <p>Starts the Serversocket that accepts all connecting client sockets. Then reads all
+   *     questions out of the "Questions.csv" file. Then writes the qustions to an
+   *     objectoutputstream.
+   */
   public void startServer() {
     try {
       while (!serverSocket.isClosed()) {
@@ -54,6 +62,11 @@ public class Server {
     }
   }
 
+  /**
+   * @author devinhasler
+   *     <p>Thread listening for nicknames, which are being sent by the clients when entering the
+   *     game and adding them to the ServerClientDashboard.
+   */
   public void listenForNames() {
     listenForNamesThread =
         new Thread(
@@ -78,6 +91,12 @@ public class Server {
     listenForNamesThread.start();
   }
 
+  /**
+   * @author devinhasler
+   *     <p>Reads in the questions from a .csv file. The path to the .csv file is passed in as a
+   *     String called filename
+   * @param filename - Path to the .csv file containing the questions.
+   */
   public void readQuestions(String filename) {
     List<QuestionModel> questions = new ArrayList<>();
     Path pathToFile = Paths.get(filename);
@@ -98,6 +117,14 @@ public class Server {
     questionModelList = questions;
   }
 
+  /**
+   * @author devinhasler
+   *     <p>Creates a questionModel out of a line in the .csv file and seperates the question,
+   *     possible answers und correct answer in order to create a new QuestionModel object, which is
+   *     then returned.
+   * @param data - Line extracted out of the .csv file
+   * @return QuestionModel
+   */
   public static QuestionModel createQuestionModel(String[] data) {
     if (data.length >= 5) {
       String question = data[0];
@@ -112,6 +139,10 @@ public class Server {
     return null;
   }
 
+  /**
+   * @author devinhasler
+   *     <p>Closes the ServerSocket connection.
+   */
   public void closeServerSocket() {
     try {
       if (serverSocket != null) {

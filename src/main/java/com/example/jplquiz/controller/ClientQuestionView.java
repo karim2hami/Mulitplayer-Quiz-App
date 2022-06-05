@@ -181,7 +181,7 @@ public class ClientQuestionView implements Initializable {
   public void loadQuestionFromList() {
 
     if (questionsNumber < questionModels.size()) {
-      lbQuestionCounter.setText(String.valueOf(questionsNumber));
+      lbQuestionCounter.setText((questionsNumber) + " von " + (questionModels.size()-1));
       QuestionModel questionModel = questionModels.get(questionsNumber);
       lbQuestion.setText(questionModel.getQuestion());
       btnA.setText(questionModel.getAnswerA());
