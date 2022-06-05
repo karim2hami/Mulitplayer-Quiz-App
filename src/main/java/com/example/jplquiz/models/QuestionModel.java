@@ -2,6 +2,10 @@ package com.example.jplquiz.models;
 
 import java.io.Serializable;
 
+/**
+ * @author karimtouhami QuestionModel: Sets up a new QuestionModel, when the questions are loaded
+ *     from the .csv file and adds the questionModel objects to a list.
+ */
 public class QuestionModel implements Serializable {
 
   private String question;

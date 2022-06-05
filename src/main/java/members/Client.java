@@ -19,7 +19,6 @@ public class Client {
   private BufferedWriter bufferedWriter;
   private String userName;
   private List<QuestionModel> questionModelList;
-
   private ClientQuestionView clientQuestionView;
 
   public Client(Socket socket, String userName) {
@@ -28,7 +27,6 @@ public class Client {
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
-
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }

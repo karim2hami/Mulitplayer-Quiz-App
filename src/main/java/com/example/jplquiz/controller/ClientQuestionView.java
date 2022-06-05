@@ -26,44 +26,31 @@ import javafx.scene.image.ImageView;
 public class ClientQuestionView implements Initializable {
 
   @FXML private Button btnA;
-
   @FXML private Button btnB;
-
   @FXML private Button btnC;
-
   @FXML private Button btnD;
-
   @FXML private ImageView imgQuestion;
-
   @FXML private Label lbCountDown;
-
   @FXML private Label lbPlayerPoints;
-
   @FXML private Label lbQuestion;
-
   @FXML private Label lbQuestionCounter;
 
   private List<QuestionModel> questionModels;
-
-  private List<Boolean> answers = new ArrayList<>();
-
+  private final List<Boolean> answers = new ArrayList<>();
   private Socket socket;
-
   private int playerScore = 0;
-
   private int falseAnswers = 0;
-
   private int correctAnswers = 0;
-
   private int questionsNumber = 1;
-
   private String rightAnswer;
-
   private Timer timer;
 
+  private static final String RIGHT_ANSWER = "Right Answer!";
+  private static final String WRONG_ANSWER = "WRONG ANSWER...";
+
   /**
-   * @author karimtouhami Method initialize is overrides the method from the Initializable Interface
-   *     of the javafx.fxml package. The method is called to initialize the ClientQuestionView
+   * @author karimtouhami Method initialize overrides the method from the Initializable Interface of
+   *     the javafx.fxml package. The method is called to initialize the ClientQuestionView
    *     Controller after its root element has been completely processed.
    *     <p>Initialize a Timer object Add all event listeneners to the GUI buttons
    * @param url - The location used to resolve relative paths for the root object, or null if the
@@ -71,8 +58,6 @@ public class ClientQuestionView implements Initializable {
    * @param resourceBundle - The resources are used to localize the root object, or null if the root
    *     object was not localized.
    */
-
-  // Methods
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     // initialize Timer
@@ -85,13 +70,13 @@ public class ClientQuestionView implements Initializable {
           System.out.println("Button A was pressed...");
           // Validate value
           if (btnA.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
@@ -107,13 +92,13 @@ public class ClientQuestionView implements Initializable {
           System.out.println("Button B was pressed...");
           // Validate value
           if (btnB.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
@@ -129,13 +114,13 @@ public class ClientQuestionView implements Initializable {
           System.out.println("Button C was pressed...");
           // Validate value
           if (btnC.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
@@ -151,13 +136,13 @@ public class ClientQuestionView implements Initializable {
           System.out.println("Button D was pressed...");
           // Validate value
           if (btnD.getText().equals(rightAnswer)) {
-            System.out.println("Right Answer!");
+            System.out.println(RIGHT_ANSWER);
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println("WRONG ANSWER...");
+            System.out.println(WRONG_ANSWER);
             answers.add(false);
             falseAnswers++;
           }
@@ -170,10 +155,9 @@ public class ClientQuestionView implements Initializable {
   }
 
   /**
-   * @author devinhasler
-   * Sets up an Outputstream of type object and writes the answers of the user to the stream.
+   * @author devinhasler sendAnswersToServer: Sets up an Outputstream of type object and writes the
+   *     answers of the user to the stream.
    */
-
   @FXML
   public void sendAnswersToServer() {
     try {
@@ -188,6 +172,11 @@ public class ClientQuestionView implements Initializable {
     }
   }
 
+  /**
+   * @author karimtouhami loadQuestionFromList: Loads one question element out of the List
+   *     questionModels, updates the GUI, starts a new countdown timer, increments the
+   *     questioncounter.
+   */
   @FXML
   public void loadQuestionFromList() {
 
@@ -212,6 +201,10 @@ public class ClientQuestionView implements Initializable {
     }
   }
 
+  /**
+   * @author karimtouhami countDownTimer: Sets up a new TimerTask of a fixed rate of 1 second to
+   *     count down from 31 and updates the counter in the GUI.
+   */
   @FXML
   public void countDownTimer() {
     System.out.println(timer);
