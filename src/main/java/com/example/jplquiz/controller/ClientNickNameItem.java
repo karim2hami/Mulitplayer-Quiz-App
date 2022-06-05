@@ -5,9 +5,9 @@ import javafx.scene.control.Label;
 
 public class ClientNickNameItem {
 
-  @FXML private Label lb_nickname;
+  @FXML private Label lbNickname;
 
   public void setItemName(String nickName) {
-    lb_nickname.setText(nickName);
+    lbNickname.setText(nickName);
   }
 }

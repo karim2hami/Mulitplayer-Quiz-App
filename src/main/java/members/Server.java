@@ -1,5 +1,6 @@
 package members;
 
+import com.example.jplquiz.ServerClientDashboard;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,53 +19,62 @@ import java.util.List;
 public class Server {
 
   private final ServerSocket serverSocket;
+
+  private Socket socket;
   public int numberOfClients = 0;
   private List<QuestionModel> questionModelList;
-  private List<String> nicknameList;
+
+  private List<String> listOfClients;
+
+  private ServerClientDashboard serverClientDashboard;
+
+  private Thread listenForNamesThread;
+
 
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
-    this.nicknameList = new ArrayList<>();
+    this.listOfClients = new ArrayList<>();
   }
+
 
   public void startServer() {
     try {
       while (!serverSocket.isClosed()) {
-        if(serverSocket.accept() != null) {
-          Socket socket = serverSocket.accept();
-          System.out.println("A new Client has connected");
-          numberOfClients++;
-          listenForMessages();
+        socket = serverSocket.accept();
+        numberOfClients++;
+        readQuestions("src/main/resources/Questions/Questions.csv");
 
-          readQuestions("src/main/resources/Questions/Questions.csv");
+        OutputStream outputStream = socket.getOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(questionModelList);
 
-          OutputStream outputStream = socket.getOutputStream();
-          ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-          objectOutputStream.writeObject(questionModelList);
-        }
+        serverClientDashboard.setSocket(socket);
+        listenForNames();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  public void listenForMessages() throws IOException {
-    Socket socket = new Socket("localhost", 1234);
-    new Thread(
+  public void listenForNames() {
+    listenForNamesThread = new Thread(
             () -> {
-              while (socket.isConnected()) {
+              while (!socket.isClosed() && !serverClientDashboard.isStart() && !listenForNamesThread.isInterrupted()) {
                 try {
+                  System.out.println(serverClientDashboard.isStart());
                   BufferedReader bufferedReader =
                       new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                  String nickName = bufferedReader.readLine();
-                  nicknameList.add(nickName);
-                  System.out.println("Player nickName: " + nickName);
+                  Object object = bufferedReader.readLine();
+                  listOfClients.add(String.valueOf(object));
+                  serverClientDashboard.addName(String.valueOf(object));
+
+                  System.out.println(object);
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
               }
-            })
-        .start();
+            });
+    listenForNamesThread.start();
   }
 
   public void readQuestions(String filename) {
@@ -109,5 +119,14 @@ public class Server {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+
+  public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
+    this.serverClientDashboard = serverClientDashboard;
+  }
+
+  public Thread getListenForNamesThread() {
+    return listenForNamesThread;
   }
 }

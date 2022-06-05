@@ -1,11 +1,12 @@
 package com.example.jplquiz;
 
+import java.io.IOException;
 import java.net.Socket;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import members.ClientThread;
+import members.Client;
 
 public class ClientApp extends Application {
 
@@ -18,18 +19,31 @@ public class ClientApp extends Application {
   @Override
   public void start(Stage primaryStage) {
     try {
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("client-loginView.fxml"));
-      Scene scene = new Scene(fxmlLoader.load());
+
+      FXMLLoader fxmlLoaderStart = new FXMLLoader(getClass().getResource("client-loginView.fxml"));
+      Scene scene = new Scene(fxmlLoaderStart.load());
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
+      ClientLoginView clientLoginView = fxmlLoaderStart.getController();
 
-      ClientThread clientThread = new ClientThread();
-      clientThread.execute();
+      setupSocket();
 
-    } catch (Exception e) {
+      Client client = new Client(socket, "TestClient");
+      clientLoginView.setClient(client);
+      clientLoginView.setSocket(socket);
+      clientLoginView.listenForStart();
+
+    } catch (IOException e) {
       e.printStackTrace();
-      Thread.currentThread().interrupt();
+    }
+  }
+
+  public void setupSocket() {
+    try {
+      socket = new Socket("localhost", 1234);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }

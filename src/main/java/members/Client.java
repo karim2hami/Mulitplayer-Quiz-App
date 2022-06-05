@@ -20,42 +20,71 @@ public class Client {
   private String userName;
   private List<QuestionModel> questionModelList;
 
+  private ClientQuestionView clientQuestionView;
+
   public Client(Socket socket, String userName) {
     try {
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.userName = userName;
+
     } catch (IOException e) {
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
   }
 
-  // Listen for Question models from Server
-  public void listenForQuestions() {
-
-    if(socket.isConnected()){
-      while (questionModelList == null) {
-        try {
-          InputStream inputStream = socket.getInputStream();
-          ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-          try {
-            this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
-            System.out.println("Client model list" + questionModelList);
-          } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-          }
-        } catch (IOException e) {
-          closeEverything(socket, bufferedReader, bufferedWriter);
-        }
+  public void sendMessage() {
+    try {
+      if (socket.isConnected()) {
+        String messageToSend = "hallo";
+        bufferedWriter.write(userName + ": " + messageToSend);
+        bufferedWriter.newLine();
+        bufferedWriter.flush();
       }
+    } catch (IOException e) {
+      closeEverything(socket, bufferedReader, bufferedWriter);
     }
   }
 
-  public void transferQuestions(ClientQuestionView clientQuestionView) {
-    System.out.println("array list client: " + questionModelList);
+  /** listenForMessage listens to messages that are broadcasted from the ClientHandler */
+
+  // Listen for Question models from Server
+  public void listenForQuestions() {
+    new Thread(
+            () -> {
+              while (questionModelList == null) {
+                try {
+                  InputStream inputStream = socket.getInputStream();
+                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                  readObjectForQuestion(objectInputStream);
+                } catch (IOException e) {
+                  closeEverything(socket, bufferedReader, bufferedWriter);
+                }
+              }
+            })
+        .start();
+  }
+
+  public void readObjectForQuestion(ObjectInputStream objectInputStream){
+    try {
+      this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
+      System.out.println(questionModelList);
+    } catch (ClassNotFoundException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void transferQuestions() {
+    System.out.println("array list client " + questionModelList);
+
+
+    clientQuestionView.setSocket(socket);
     clientQuestionView.setQuestionModels(questionModelList);
-    clientQuestionView.loadQuestionFromList();
+    if(questionModelList != null){
+      clientQuestionView.loadQuestionFromList();
+    }
+
   }
 
   public void closeEverything(
@@ -75,11 +104,12 @@ public class Client {
     }
   }
 
-  public List<QuestionModel> getQuestionModelList() {
-    return questionModelList;
+  public void setClientQuestionView(ClientQuestionView clientQuestionView) {
+    this.clientQuestionView = clientQuestionView;
   }
 
-  public void setQuestionModelList(List<QuestionModel> questionModelList) {
+  public void setQuestionModelList(
+      List<QuestionModel> questionModelList) {
     this.questionModelList = questionModelList;
   }
 }

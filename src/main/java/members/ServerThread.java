@@ -1,5 +1,6 @@
 package members;
 
+import com.example.jplquiz.ServerClientDashboard;
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -7,6 +8,8 @@ public class ServerThread implements Runnable {
 
 	private final Thread thread;
 	ServerSocket serverSocket = null;
+
+	private ServerClientDashboard serverClientDashboard;
 
 	public ServerThread() {
 		thread = new Thread(this);
@@ -20,10 +23,18 @@ public class ServerThread implements Runnable {
 			e.printStackTrace();
 		}
 		Server server = new Server(serverSocket);
+		serverClientDashboard.setServer(server);
+		server.setServerClientDashboard(serverClientDashboard);
 		server.startServer();
+
+
 	}
 
 	public void execute() {
 		thread.start();
+	}
+
+	public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
+		this.serverClientDashboard = serverClientDashboard;
 	}
 }

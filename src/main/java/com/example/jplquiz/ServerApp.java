@@ -23,6 +23,7 @@ public class ServerApp extends Application {
       primaryStage.show();
 
       ServerThread serverThread = new ServerThread();
+      serverThread.setServerClientDashboard(fxmlLoader.getController());
       serverThread.execute();
 
     } catch (IOException e) {
