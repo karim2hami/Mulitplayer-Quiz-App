@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="528.0" prefWidth="732.0" style="-fx-background-color: #612CB9;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.jplquiz.controller.ServerRanking">
    <children>
       <BorderPane prefHeight="656.0" prefWidth="741.0">
@@ -74,7 +73,7 @@
                            <children>
                               <Label text="1st" textFill="WHITE">
                                  <font>
-                                    <Font size="36.0" />
+                                    <Font name="System Bold" size="36.0" />
                                  </font>
                               </Label>
                            </children>
@@ -98,7 +97,7 @@
                            <children>
                               <Label text="3rd" textFill="WHITE">
                                  <font>
-                                    <Font size="36.0" />
+                                    <Font name="System Bold" size="36.0" />
                                  </font>
                               </Label>
                            </children>
