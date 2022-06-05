@@ -20,9 +20,11 @@ public class Server {
   private final ServerSocket serverSocket;
   public int numberOfClients = 0;
   private List<QuestionModel> questionModelList;
+  private List<String> nicknameList;
 
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
+    this.nicknameList = new ArrayList<>();
   }
 
   public void startServer() {

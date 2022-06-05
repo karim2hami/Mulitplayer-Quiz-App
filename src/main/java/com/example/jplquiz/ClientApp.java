@@ -1,5 +1,6 @@
 package com.example.jplquiz;
 
+import java.net.Socket;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

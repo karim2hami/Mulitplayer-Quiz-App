@@ -33,24 +33,23 @@ public class Client {
 
   // Listen for Question models from Server
   public void listenForQuestions() {
-    new Thread(
-            () -> {
-              while (socket.isConnected()) {
-                try {
-                  InputStream inputStream = socket.getInputStream();
-                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                  try {
-                    this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
-                    System.out.println("question model list" + questionModelList);
-                  } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                  }
-                } catch (IOException e) {
-                  closeEverything(socket, bufferedReader, bufferedWriter);
-                }
-              }
-            })
-        .start();
+
+    if(socket.isConnected()){
+      while (questionModelList == null) {
+        try {
+          InputStream inputStream = socket.getInputStream();
+          ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+          try {
+            this.questionModelList = (List<QuestionModel>) objectInputStream.readObject();
+            System.out.println("Client model list" + questionModelList);
+          } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+          }
+        } catch (IOException e) {
+          closeEverything(socket, bufferedReader, bufferedWriter);
+        }
+      }
+    }
   }
 
   public void transferQuestions(ClientQuestionView clientQuestionView) {
