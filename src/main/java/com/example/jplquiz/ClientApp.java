@@ -2,6 +2,7 @@ package com.example.jplquiz;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

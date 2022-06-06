@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -27,6 +29,11 @@ public class Client {
   private String userName;
   private List<QuestionModel> questionModelList;
   private ClientQuestionView clientQuestionView;
+
+  private HashMap<String,Integer> namePointsMap;
+
+  private Thread listenForQuestionsThread;
+
 
   /**
    * @author karimtouhami
@@ -51,8 +58,24 @@ public class Client {
       bufferedWriter.write(userName);
       bufferedWriter.newLine();
       bufferedWriter.flush();
-      // Create a scanner for user input.
-      // While there is still a connection with the server, continue to scan the terminal and then send the message.
+
+    } catch (IOException e) {
+      // Gracefully close everything.
+      closeEverything(socket, bufferedReader, bufferedWriter);
+    }
+  }
+
+  public void sendNamesAndPoints(){
+    try {
+
+      for (int i = 0; i < 2; i++) {
+        String namesPointsString = userName+ ";" + clientQuestionView.getPlayerScore();
+        bufferedWriter.write(namesPointsString);
+        bufferedWriter.newLine();
+        bufferedWriter.flush();
+      }
+
+
     } catch (IOException e) {
       // Gracefully close everything.
       closeEverything(socket, bufferedReader, bufferedWriter);
@@ -68,7 +91,7 @@ public class Client {
    *     <p>Listens for messages that are broadcasted from the ClientHandler.
    */
   public void listenForQuestions() {
-    new Thread(
+    listenForQuestionsThread = new Thread(
             () -> {
               while (questionModelList == null) {
                 try {
@@ -78,6 +101,25 @@ public class Client {
 
                 } catch (IOException e) {
                   closeEverything(socket, bufferedReader, bufferedWriter);
+                }
+              }
+            });
+    listenForQuestionsThread.start();
+  }
+
+  public void listenForRankings(){
+    new Thread(
+            () -> {
+              while (namePointsMap.isEmpty()) {
+                try {
+                  InputStream inputStream = socket.getInputStream();
+                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
+                  namePointsMap = (HashMap<String, Integer>) objectInputStream.readObject();
+
+                } catch (IOException e) {
+                  closeEverything(socket, bufferedReader, bufferedWriter);
+                } catch (ClassNotFoundException e) {
+                  throw new RuntimeException(e);
                 }
               }
             })
@@ -159,5 +201,9 @@ public class Client {
 
   public BufferedWriter getBufferedWriter(){
     return bufferedWriter;
+  }
+
+  public Thread getListenForQuestionsThread() {
+    return listenForQuestionsThread;
   }
 }

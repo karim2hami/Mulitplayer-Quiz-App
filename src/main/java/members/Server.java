@@ -4,9 +4,7 @@ import com.example.jplquiz.ServerClientDashboard;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -52,7 +50,7 @@ public class Server {
   public void startServer() {
     try {
       while (!serverSocket.isClosed()) {
-        socket = serverSocket.accept();
+        Socket socket = serverSocket.accept();
         readQuestions("src/main/resources/Questions/Questions.csv");
 
 

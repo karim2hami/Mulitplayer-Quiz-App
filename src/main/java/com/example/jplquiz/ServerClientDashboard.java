@@ -108,7 +108,6 @@ public class ServerClientDashboard implements Initializable {
       btnStart.setDisable(true);
       server.getListenForNamesThread().interrupt();
       server.getClientHandler().broadcastMessage("true");
-      server.listenForNamesAndPoints();
     }
   }
 

@@ -39,12 +39,11 @@ public class ClientLoginView implements Initializable {
   @FXML private Label title;
   @FXML private VBox whiteBackground;
 
-  private BufferedReader bufferedReader;
+
   private Socket socket;
   private Client client;
   private FXMLLoader questionListLoader;
   private boolean isStart = false;
-  private int index = 0;
   private boolean nickNameSent = false;
 
   private ObservableList<String> observableList;
@@ -72,6 +71,7 @@ public class ClientLoginView implements Initializable {
     btnEnter.setOnAction(
         actionEvent -> {
           listenForStart();
+
           if (!nickNameSent) {
             String userName = tfdNickname.getText();
             client.setUserName(userName);
@@ -92,6 +92,7 @@ public class ClientLoginView implements Initializable {
   @FXML
   void sendNickName(String nickName) {
     try {
+
       BufferedWriter bufferedWriter = client.getBufferedWriter();
       bufferedWriter.write(nickName);
       bufferedWriter.newLine();
@@ -102,6 +103,7 @@ public class ClientLoginView implements Initializable {
       btnEnter.setVisible(false);
       tfdNickname.setVisible(false);
 
+
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -111,7 +113,7 @@ public class ClientLoginView implements Initializable {
   @FXML
   void changeToClientQuestionView() {
     try {
-      client.listenForQuestions();
+
       Stage stage = new Stage();
       Scene scene = new Scene(questionListLoader.load());
       ClientQuestionView clientQuestionView = questionListLoader.getController();
@@ -135,7 +137,7 @@ public class ClientLoginView implements Initializable {
    *     the scene is changed to the "client-questionView.fxml" and the game begins.
    */
   public void listenForStart() {
-    bufferedReader = client.getBufferedReader();
+    BufferedReader bufferedReader = client.getBufferedReader();
     new Thread(
             () -> {
               while (socket.isConnected()) {

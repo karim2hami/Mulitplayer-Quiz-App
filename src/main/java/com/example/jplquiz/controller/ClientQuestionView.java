@@ -75,16 +75,16 @@ public class ClientQuestionView implements Initializable {
     // initialize all buttons and their corresponding event listeners
     btnA.setOnMouseClicked(
         actionEvent -> {
-          System.out.println("Button A was pressed...");
+
           // Validate value
           if (btnA.getText().equals(rightAnswer)) {
-            System.out.println(RIGHT_ANSWER);
+
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println(WRONG_ANSWER);
+
             answers.add(false);
             falseAnswers++;
           }
@@ -97,16 +97,16 @@ public class ClientQuestionView implements Initializable {
 
     btnB.setOnMouseClicked(
         actionEvent -> {
-          System.out.println("Button B was pressed...");
+
           // Validate value
           if (btnB.getText().equals(rightAnswer)) {
-            System.out.println(RIGHT_ANSWER);
+
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println(WRONG_ANSWER);
+
             answers.add(false);
             falseAnswers++;
           }
@@ -119,16 +119,16 @@ public class ClientQuestionView implements Initializable {
 
     btnC.setOnMouseClicked(
         actionEvent -> {
-          System.out.println("Button C was pressed...");
+
           // Validate value
           if (btnC.getText().equals(rightAnswer)) {
-            System.out.println(RIGHT_ANSWER);
+
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println(WRONG_ANSWER);
+
             answers.add(false);
             falseAnswers++;
           }
@@ -141,16 +141,16 @@ public class ClientQuestionView implements Initializable {
 
     btnD.setOnMouseClicked(
         actionEvent -> {
-          System.out.println("Button D was pressed...");
+
           // Validate value
           if (btnD.getText().equals(rightAnswer)) {
-            System.out.println(RIGHT_ANSWER);
+
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
-            System.out.println(WRONG_ANSWER);
+
             answers.add(false);
             falseAnswers++;
           }
@@ -168,13 +168,9 @@ public class ClientQuestionView implements Initializable {
    */
   @FXML
   public void sendNamePointsString() {
-    bufferedWriter = client.getBufferedWriter();
+
     try {
-      String namesPointsString = client.getUserName() + ";" + playerScore;
-      bufferedWriter.write(namesPointsString);
-      bufferedWriter.newLine();
-      bufferedWriter.flush();
-      System.out.println("Sending of answers completed!");
+      client.sendNamesAndPoints();
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("Sending of Answers failed");
@@ -203,9 +199,7 @@ public class ClientQuestionView implements Initializable {
       questionsNumber++;
 
     } else {
-      System.out.println("All questions answered, game finished...");
       // send answers back to server...
-      System.out.println("Sending all answers to Server");
       sendNamePointsString();
     }
   }
@@ -245,5 +239,10 @@ public class ClientQuestionView implements Initializable {
 
   public void setClient(Client client) {
     this.client = client;
+  }
+
+
+  public int getPlayerScore() {
+    return playerScore;
   }
 }

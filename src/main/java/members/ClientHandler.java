@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ClientHandler implements Runnable {
@@ -18,7 +19,9 @@ public class ClientHandler implements Runnable {
   private BufferedWriter bufferedWriter;
   private String clientUsername;
 
-  private boolean isStart;
+  private HashMap<String,Integer> namePointsMap = new HashMap<>();
+
+  private boolean isStart = false;
 
   private ServerClientDashboard serverClientDashboard;
 
@@ -50,8 +53,11 @@ public class ClientHandler implements Runnable {
         if (!isStart) {
           serverClientDashboard.addName(messageFromClient);
         } else{
-
+          String[] namesPointsArray = messageFromClient.split(";");
+          namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
+          System.out.println("hallo");
         }
+        System.out.println("isStart" + isStart);
         broadcastMessage(messageFromClient);
       } catch (IOException e) {
         closeEverything(socket, bufferedReader, bufferedWriter);
@@ -62,12 +68,13 @@ public class ClientHandler implements Runnable {
 
   // Send a message to all clients at the same time
   public void broadcastMessage(String messageToSend) {
-    if(messageToSend.equals("true")){
-      isStart = true;
-    }
+
     for (ClientHandler clientHandler : clientHandlers) {
       try {
-
+          if(messageToSend.equals("true")){
+            isStart = true;
+            System.out.println("isStart is set to true");
+          }
           clientHandler.bufferedWriter.write(messageToSend);
           // clients wait for the new line
           clientHandler.bufferedWriter.newLine();
