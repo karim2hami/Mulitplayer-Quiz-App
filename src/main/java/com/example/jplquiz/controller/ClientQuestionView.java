@@ -2,6 +2,7 @@ package com.example.jplquiz.controller;
 
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -11,11 +12,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.stage.Stage;
 import members.Client;
 
 /**
@@ -70,89 +76,101 @@ public class ClientQuestionView implements Initializable {
     countDownTimer();
 
     // initialize all buttons and their corresponding event listeners
-    btnA.setOnMouseClicked(
+    btnA.setOnAction(
         actionEvent -> {
           System.out.println("Button A was pressed...");
           // Validate value
           if (btnA.getText().equals(rightAnswer)) {
             System.out.println(RIGHT_ANSWER);
+            btnA.setStyle("-fx-background-color: green");
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
             System.out.println(WRONG_ANSWER);
+            btnA.setStyle("-fx-background-color: red");
             answers.add(false);
             falseAnswers++;
           }
           // Stop Timer and initialize a new one
           timer.cancel();
+          timeOut();
           timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
         });
 
-    btnB.setOnMouseClicked(
+    btnB.setOnAction(
         actionEvent -> {
           System.out.println("Button B was pressed...");
           // Validate value
           if (btnB.getText().equals(rightAnswer)) {
             System.out.println(RIGHT_ANSWER);
+            btnB.setStyle("-fx-background-color: green");
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
             System.out.println(WRONG_ANSWER);
+            btnB.setStyle("-fx-background-color: red");
             answers.add(false);
             falseAnswers++;
           }
           // Stop Timer and initialize a new one
           timer.cancel();
+          timeOut();
           timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
         });
 
-    btnC.setOnMouseClicked(
+    btnC.setOnAction(
         actionEvent -> {
           System.out.println("Button C was pressed...");
           // Validate value
           if (btnC.getText().equals(rightAnswer)) {
             System.out.println(RIGHT_ANSWER);
+            btnC.setStyle("-fx-background-color: green");
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
             System.out.println(WRONG_ANSWER);
+            btnC.setStyle("-fx-background-color: red");
             answers.add(false);
             falseAnswers++;
           }
           // Stop Timer and initialize a new one
           timer.cancel();
+          timeOut();
           timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
         });
 
-    btnD.setOnMouseClicked(
+    btnD.setOnAction(
         actionEvent -> {
           System.out.println("Button D was pressed...");
           // Validate value
           if (btnD.getText().equals(rightAnswer)) {
             System.out.println(RIGHT_ANSWER);
+            btnD.setStyle("-fx-background-color: green");
             answers.add(true);
             correctAnswers++;
             playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
             lbPlayerPoints.setText(String.valueOf(playerScore));
           } else {
             System.out.println(WRONG_ANSWER);
+            btnD.setStyle("-fx-background-color: red");
             answers.add(false);
             falseAnswers++;
           }
           // Stop Timer and initialize a new one
           timer.cancel();
+          timeOut();
           timer = new Timer();
           // loadNewQuestion
           loadQuestionFromList();
@@ -186,6 +204,11 @@ public class ClientQuestionView implements Initializable {
   @FXML
   public void loadQuestionFromList() {
 
+    btnA.setStyle("-fx-background-color: #FF006E");
+    btnB.setStyle("-fx-background-color: #3A86FF");
+    btnC.setStyle("-fx-background-color: #FFBE0B");
+    btnD.setStyle("-fx-background-color: #FB5607");
+
     if (questionsNumber < questionModels.size()) {
       lbQuestionCounter.setText((questionsNumber) + " von " + (questionModels.size() - 1));
       QuestionModel questionModel = questionModels.get(questionsNumber);
@@ -199,12 +222,13 @@ public class ClientQuestionView implements Initializable {
           String.valueOf(getClass().getResource(questionModel.getImagePath()))));
       countDownTimer();
       questionsNumber++;
-
     } else {
       System.out.println("All questions answered, game finished...");
       // send answers back to server...
       System.out.println("Sending all answers to Server");
       sendNamePointsString();
+      System.out.println("Changing to Ranking scene");
+      changeToServerRanking();
     }
   }
 
@@ -231,6 +255,31 @@ public class ClientQuestionView implements Initializable {
         },
         0,
         1000);
+  }
+
+  public void timeOut() {
+    try {
+      Thread.sleep(500);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @FXML
+  void changeToServerRanking() {
+    try {
+      Stage stage = new Stage();
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("server-Ranking.fxml"));
+      Scene scene = new Scene(fxmlLoader.load());
+      stage.setScene(scene);
+      stage.setResizable(false);
+      stage.setTitle("Multiplayer Quiz App");
+      stage.show();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Stage clientQuestionView = (Stage) btnA.getScene().getWindow();
+    clientQuestionView.close();
   }
 
   public void setQuestionModels(List<QuestionModel> questionModels) {
