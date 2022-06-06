@@ -98,6 +98,9 @@ public class ClientLoginView implements Initializable {
       bufferedWriter.flush();
       title.setText("Waiting for the Game to start...");
       nickNameSent = true;
+      whiteBackground.setVisible(false);
+      btnEnter.setVisible(false);
+      tfdNickname.setVisible(false);
 
     } catch (IOException e) {
       e.printStackTrace();

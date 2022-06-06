@@ -56,9 +56,7 @@ public class Server {
         readQuestions("src/main/resources/Questions/Questions.csv");
 
 
-        OutputStream outputStream = socket.getOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-        objectOutputStream.writeObject(questionModelList);
+        sendObject(questionModelList);
 
         clientHandler = new ClientHandler(socket);
         clientHandler.setServerClientDashboard(serverClientDashboard);
@@ -72,6 +70,12 @@ public class Server {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void sendObject(Object object) throws IOException {
+    OutputStream outputStream = socket.getOutputStream();
+    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+    objectOutputStream.writeObject(object);
   }
 
 

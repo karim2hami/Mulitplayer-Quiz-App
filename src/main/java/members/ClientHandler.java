@@ -18,6 +18,8 @@ public class ClientHandler implements Runnable {
   private BufferedWriter bufferedWriter;
   private String clientUsername;
 
+  private boolean isStart;
+
   private ServerClientDashboard serverClientDashboard;
 
   /**
@@ -45,7 +47,11 @@ public class ClientHandler implements Runnable {
     while (socket.isConnected()) {
       try {
         messageFromClient = bufferedReader.readLine();
-        serverClientDashboard.addName(messageFromClient);
+        if (!isStart) {
+          serverClientDashboard.addName(messageFromClient);
+        } else{
+
+        }
         broadcastMessage(messageFromClient);
       } catch (IOException e) {
         closeEverything(socket, bufferedReader, bufferedWriter);
@@ -56,6 +62,9 @@ public class ClientHandler implements Runnable {
 
   // Send a message to all clients at the same time
   public void broadcastMessage(String messageToSend) {
+    if(messageToSend.equals("true")){
+      isStart = true;
+    }
     for (ClientHandler clientHandler : clientHandlers) {
       try {
 

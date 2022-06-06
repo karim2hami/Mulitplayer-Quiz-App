@@ -39,6 +39,8 @@ public class ClientQuestionView implements Initializable {
   @FXML private Label lbQuestionCounter;
 
   private Client client;
+
+  private BufferedWriter bufferedWriter;
   private List<QuestionModel> questionModels;
   private final List<Boolean> answers = new ArrayList<>();
   private Socket socket;
@@ -64,6 +66,8 @@ public class ClientQuestionView implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
     // initialize Timer
     timer = new Timer();
     countDownTimer();
@@ -164,10 +168,9 @@ public class ClientQuestionView implements Initializable {
    */
   @FXML
   public void sendNamePointsString() {
+    bufferedWriter = client.getBufferedWriter();
     try {
       String namesPointsString = client.getUserName() + ";" + playerScore;
-      BufferedWriter bufferedWriter =
-          new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       bufferedWriter.write(namesPointsString);
       bufferedWriter.newLine();
       bufferedWriter.flush();
