@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 public class ServerRanking {
 
   @FXML
+  private Label title;
+  @FXML
   private Label labelRankOne;
 
   @FXML

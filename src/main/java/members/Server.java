@@ -4,7 +4,9 @@ import com.example.jplquiz.ServerClientDashboard;
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -14,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,13 +27,16 @@ import java.util.List;
  */
 public class Server {
 
+  private ClientHandler clientHandler;
   private final ServerSocket serverSocket;
   private Socket socket;
-  private int numberOfClients = 0;
   private List<QuestionModel> questionModelList;
   private List<String> listOfClients;
+
+  private HashMap<String,Integer> namePointsMap = new HashMap<>();
   private ServerClientDashboard serverClientDashboard;
   private Thread listenForNamesThread;
+  private Thread listenForNamesAndPointsThread;
 
   public Server(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
@@ -47,12 +53,18 @@ public class Server {
     try {
       while (!serverSocket.isClosed()) {
         socket = serverSocket.accept();
-        numberOfClients++;
         readQuestions("src/main/resources/Questions/Questions.csv");
+
 
         OutputStream outputStream = socket.getOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
         objectOutputStream.writeObject(questionModelList);
+
+        clientHandler = new ClientHandler(socket);
+        clientHandler.setServerClientDashboard(serverClientDashboard);
+        Thread thread = new Thread(clientHandler);
+        thread.start();
+
 
         serverClientDashboard.setSocket(socket);
         listenForNames();
@@ -61,6 +73,7 @@ public class Server {
       e.printStackTrace();
     }
   }
+
 
   /**
    * @author devinhasler
@@ -71,18 +84,14 @@ public class Server {
     listenForNamesThread =
         new Thread(
             () -> {
-              while (!socket.isClosed()
-                  && !serverClientDashboard.isStart()
+              while (!socket.isClosed() && !serverClientDashboard.isStart()
                   && !listenForNamesThread.isInterrupted()) {
                 try {
-                  System.out.println(serverClientDashboard.isStart());
                   BufferedReader bufferedReader =
                       new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                  Object object = bufferedReader.readLine();
-                  listOfClients.add(String.valueOf(object));
-                  serverClientDashboard.addName(String.valueOf(object));
-
-                  System.out.println(object);
+                  String object = bufferedReader.readLine();
+                  listOfClients.add(object);
+                  serverClientDashboard.addName(object);
                 } catch (IOException e) {
                   e.printStackTrace();
                 }
@@ -90,6 +99,27 @@ public class Server {
             });
     listenForNamesThread.start();
   }
+
+  public void listenForNamesAndPoints() {
+    listenForNamesAndPointsThread =
+        new Thread(
+            () -> {
+              while (!socket.isClosed()) {
+                try {
+                  BufferedReader bufferedReader =
+                      new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                  String namesPointsString = bufferedReader.readLine();
+                  String[] namesPointsArray = namesPointsString.split(";");
+                  namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
+                  System.out.println("listen for Points Thread");
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
+            });
+    listenForNamesAndPointsThread.start();
+  }
+
 
   /**
    * @author devinhasler
@@ -159,5 +189,9 @@ public class Server {
 
   public Thread getListenForNamesThread() {
     return listenForNamesThread;
+  }
+
+  public ClientHandler getClientHandler() {
+    return clientHandler;
   }
 }

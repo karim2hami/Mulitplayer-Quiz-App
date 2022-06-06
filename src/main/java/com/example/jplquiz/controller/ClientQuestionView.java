@@ -1,8 +1,10 @@
 package com.example.jplquiz.controller;
 
 import com.example.jplquiz.models.QuestionModel;
+import java.io.BufferedWriter;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import members.Client;
 
 /**
  * @author devinhasler ClientQuestionView: Controller Class of client-questionView.fxml Displays the
@@ -35,6 +38,7 @@ public class ClientQuestionView implements Initializable {
   @FXML private Label lbQuestion;
   @FXML private Label lbQuestionCounter;
 
+  private Client client;
   private List<QuestionModel> questionModels;
   private final List<Boolean> answers = new ArrayList<>();
   private Socket socket;
@@ -159,13 +163,15 @@ public class ClientQuestionView implements Initializable {
    *     answers of the user to the stream.
    */
   @FXML
-  public void sendAnswersToServer() {
+  public void sendNamePointsString() {
     try {
-      OutputStream outputStream = socket.getOutputStream();
-      ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-      objectOutputStream.writeObject(answers);
+      String namesPointsString = client.getUserName() + ";" + playerScore;
+      BufferedWriter bufferedWriter =
+          new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+      bufferedWriter.write(namesPointsString);
+      bufferedWriter.newLine();
+      bufferedWriter.flush();
       System.out.println("Sending of answers completed!");
-      socket.close();
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("Sending of Answers failed");
@@ -197,7 +203,7 @@ public class ClientQuestionView implements Initializable {
       System.out.println("All questions answered, game finished...");
       // send answers back to server...
       System.out.println("Sending all answers to Server");
-      sendAnswersToServer();
+      sendNamePointsString();
     }
   }
 
@@ -207,7 +213,6 @@ public class ClientQuestionView implements Initializable {
    */
   @FXML
   public void countDownTimer() {
-    System.out.println(timer);
     timer.scheduleAtFixedRate(
         new TimerTask() {
           int count = 31;
@@ -233,5 +238,9 @@ public class ClientQuestionView implements Initializable {
 
   public void setSocket(Socket socket) {
     this.socket = socket;
+  }
+
+  public void setClient(Client client) {
+    this.client = client;
   }
 }

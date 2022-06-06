@@ -1,6 +1,8 @@
 package com.example.jplquiz;
 
+import com.example.jplquiz.controller.ClientQuestionView;
 import com.example.jplquiz.models.QuestionModel;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +13,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -34,12 +39,15 @@ public class ClientLoginView implements Initializable {
   @FXML private Label title;
   @FXML private VBox whiteBackground;
 
+  private BufferedReader bufferedReader;
   private Socket socket;
   private Client client;
   private FXMLLoader questionListLoader;
   private boolean isStart = false;
   private int index = 0;
   private boolean nickNameSent = false;
+
+  private ObservableList<String> observableList;
 
   /**
    * @author karimtouhami Method initialize overrides the method from the Initializable Interface of
@@ -54,13 +62,22 @@ public class ClientLoginView implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    observableList = FXCollections.observableArrayList();
+
+    observableList.addListener(
+        ((InvalidationListener) observable -> Platform.runLater(this::changeToClientQuestionView)));
+
     questionListLoader = new FXMLLoader(getClass().getResource("client-questionView.fxml"));
 
     btnEnter.setOnAction(
         actionEvent -> {
+          listenForStart();
           if (!nickNameSent) {
-            String nickName = tfdNickname.getText();
-            sendNickName(nickName);
+            String userName = tfdNickname.getText();
+            client.setUserName(userName);
+            client.sendMessage();
+            sendNickName(userName);
+
           } else if (isStart) {
             changeToClientQuestionView();
           }
@@ -75,16 +92,12 @@ public class ClientLoginView implements Initializable {
   @FXML
   void sendNickName(String nickName) {
     try {
-      BufferedWriter bufferedWriter =
-          new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+      BufferedWriter bufferedWriter = client.getBufferedWriter();
       bufferedWriter.write(nickName);
       bufferedWriter.newLine();
       bufferedWriter.flush();
       title.setText("Waiting for the Game to start...");
       nickNameSent = true;
-      btnEnter.setVisible(false);
-      tfdNickname.setVisible(false);
-      whiteBackground.setVisible(false);
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -95,9 +108,12 @@ public class ClientLoginView implements Initializable {
   @FXML
   void changeToClientQuestionView() {
     try {
+      client.listenForQuestions();
       Stage stage = new Stage();
       Scene scene = new Scene(questionListLoader.load());
-      client.setClientQuestionView(questionListLoader.getController());
+      ClientQuestionView clientQuestionView = questionListLoader.getController();
+      clientQuestionView.setClient(client);
+      client.setClientQuestionView(clientQuestionView);
       stage.setScene(scene);
       stage.setResizable(false);
       stage.setTitle("Multiplayer Quiz App");
@@ -116,24 +132,17 @@ public class ClientLoginView implements Initializable {
    *     the scene is changed to the "client-questionView.fxml" and the game begins.
    */
   public void listenForStart() {
+    bufferedReader = client.getBufferedReader();
     new Thread(
             () -> {
-              while (!isStart && socket.isConnected()) {
+              while (socket.isConnected()) {
                 try {
-                  InputStream inputStream = socket.getInputStream();
-                  ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                  Object response = objectInputStream.readObject();
-                  if (index == 0) {
-                    client.setQuestionModelList((List<QuestionModel>) response);
-                    System.out.println(response);
-                    index++;
-                  } else {
-                    isStart = true;
+                  String message = bufferedReader.readLine();
+                  System.out.println(message);
+                  if (message.equals("true")) {
                     Platform.runLater(this::changeToClientQuestionView);
-                    System.out.println("isStart = " + true);
-                    Thread.currentThread().interrupt();
                   }
-                } catch (ClassNotFoundException | IOException e) {
+                } catch (IOException e) {
                   e.printStackTrace();
                 }
               }
@@ -147,5 +156,9 @@ public class ClientLoginView implements Initializable {
 
   public void setSocket(Socket socket) {
     this.socket = socket;
+  }
+
+  public void setStart(boolean start) {
+    isStart = start;
   }
 }

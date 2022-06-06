@@ -39,7 +39,7 @@ public class ServerClientDashboard implements Initializable {
   private ArrayList<String> tempNameList;
   private Socket socket;
   private Server server;
-  private boolean isStart = false;
+  private boolean isStart;
 
   /**
    * @author karimtouhami
@@ -59,6 +59,7 @@ public class ServerClientDashboard implements Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    isStart = false;
     tempNameList = new ArrayList<>();
     observableList = FXCollections.observableArrayList();
 
@@ -102,16 +103,12 @@ public class ServerClientDashboard implements Initializable {
    */
   @FXML
   void sendStart() {
-    try {
-      if (socket.isConnected()) {
-        server.getListenForNamesThread().interrupt();
-        isStart = true;
-        OutputStream outputStream = socket.getOutputStream();
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-        objectOutputStream.writeObject(true);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+    if (socket.isConnected()) {
+      setStart(true);
+      btnStart.setDisable(true);
+      server.getListenForNamesThread().interrupt();
+      server.getClientHandler().broadcastMessage("true");
+      server.listenForNamesAndPoints();
     }
   }
 
@@ -126,7 +123,6 @@ public class ServerClientDashboard implements Initializable {
       tempNameList.add(name);
       observableList.add(name);
     }
-    System.out.println(observableList);
   }
 
   public void setSocket(Socket socket) {
@@ -139,5 +135,9 @@ public class ServerClientDashboard implements Initializable {
 
   public void setServer(Server server) {
     this.server = server;
+  }
+
+  public void setStart(boolean start) {
+    isStart = start;
   }
 }

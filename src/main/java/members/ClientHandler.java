@@ -1,5 +1,6 @@
 package members;
 
+import com.example.jplquiz.ServerClientDashboard;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -17,6 +18,8 @@ public class ClientHandler implements Runnable {
   private BufferedWriter bufferedWriter;
   private String clientUsername;
 
+  private ServerClientDashboard serverClientDashboard;
+
   /**
    * @param socket <Client Handler that is responsible for communication with Client and Server
    *     <OutputStream is wrapped with BufferWriter for sending characters and not bytes same is
@@ -27,6 +30,7 @@ public class ClientHandler implements Runnable {
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      this.clientUsername = bufferedReader.readLine();
       clientHandlers.add(this);
       broadcastMessage("Server: " + clientUsername + " has entered the game!");
     } catch (IOException e) {
@@ -41,7 +45,7 @@ public class ClientHandler implements Runnable {
     while (socket.isConnected()) {
       try {
         messageFromClient = bufferedReader.readLine();
-        System.out.println(clientUsername);
+        serverClientDashboard.addName(messageFromClient);
         broadcastMessage(messageFromClient);
       } catch (IOException e) {
         closeEverything(socket, bufferedReader, bufferedWriter);
@@ -53,14 +57,12 @@ public class ClientHandler implements Runnable {
   // Send a message to all clients at the same time
   public void broadcastMessage(String messageToSend) {
     for (ClientHandler clientHandler : clientHandlers) {
-
       try {
-        if (!clientHandler.clientUsername.equals(clientUsername)) {
+
           clientHandler.bufferedWriter.write(messageToSend);
           // clients wait for the new line
           clientHandler.bufferedWriter.newLine();
           clientHandler.bufferedWriter.flush();
-        }
       } catch (IOException e) {
         closeEverything(socket, bufferedReader, bufferedWriter);
       }
@@ -88,5 +90,10 @@ public class ClientHandler implements Runnable {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+
+  public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
+    this.serverClientDashboard = serverClientDashboard;
   }
 }

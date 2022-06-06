@@ -33,20 +33,23 @@ public class ClientApp extends Application {
   @Override
   public void start(Stage primaryStage) {
     try {
-
+      setupSocket();
       FXMLLoader fxmlLoaderStart = new FXMLLoader(getClass().getResource("client-loginView.fxml"));
+      Client client = new Client(socket, String.valueOf(Math.random()));
+      client.listenForQuestions();
       Scene scene = new Scene(fxmlLoaderStart.load());
+
+      ClientLoginView clientLoginView = fxmlLoaderStart.getController();
+      clientLoginView.setClient(client);
+      clientLoginView.setSocket(socket);
+
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
-      ClientLoginView clientLoginView = fxmlLoaderStart.getController();
 
-      setupSocket();
 
-      Client client = new Client(socket, "TestClient");
-      clientLoginView.setClient(client);
-      clientLoginView.setSocket(socket);
-      clientLoginView.listenForStart();
+
+
 
     } catch (IOException e) {
       e.printStackTrace();

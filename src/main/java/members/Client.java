@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author karimtouhami
@@ -46,16 +47,21 @@ public class Client {
 
   public void sendMessage() {
     try {
-      if (socket.isConnected()) {
-        String messageToSend = "hallo";
-        bufferedWriter.write(userName + ": " + messageToSend);
-        bufferedWriter.newLine();
-        bufferedWriter.flush();
-      }
+      // Initially send the username of the client.
+      bufferedWriter.write(userName);
+      bufferedWriter.newLine();
+      bufferedWriter.flush();
+      // Create a scanner for user input.
+      // While there is still a connection with the server, continue to scan the terminal and then send the message.
     } catch (IOException e) {
+      // Gracefully close everything.
       closeEverything(socket, bufferedReader, bufferedWriter);
     }
   }
+
+
+  // Listening for a message is blocking so need a separate thread for that.
+
 
   /**
    * @author devinhasler
@@ -69,6 +75,7 @@ public class Client {
                   InputStream inputStream = socket.getInputStream();
                   ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                   readObjectForQuestion(objectInputStream);
+
                 } catch (IOException e) {
                   closeEverything(socket, bufferedReader, bufferedWriter);
                 }
@@ -98,7 +105,6 @@ public class Client {
    *     stored as a variable.
    */
   public void transferQuestions() {
-    System.out.println("ArrayList client " + questionModelList);
     clientQuestionView.setSocket(socket);
     clientQuestionView.setQuestionModels(questionModelList);
     if (questionModelList != null) {
@@ -137,5 +143,21 @@ public class Client {
 
   public void setQuestionModelList(List<QuestionModel> questionModelList) {
     this.questionModelList = questionModelList;
+  }
+
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public BufferedReader getBufferedReader() {
+    return bufferedReader;
+  }
+
+  public BufferedWriter getBufferedWriter(){
+    return bufferedWriter;
   }
 }
