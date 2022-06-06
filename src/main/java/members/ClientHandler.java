@@ -78,13 +78,16 @@ public class ClientHandler implements Runnable {
                     index++;
                 }else if (messageToSend.equals("true")) {
                     clientHandler.setStart(true);
-                } else if(index == clientHandlers.size()){
-                    broadcastResultMap();
                 }
                 clientHandler.bufferedWriter.write(messageToSend);
                 // clients wait for the new line
                 clientHandler.bufferedWriter.newLine();
                 clientHandler.bufferedWriter.flush();
+                if(index == clientHandlers.size()){
+                    clientHandler.bufferedWriter.close();
+                    broadcastResultMap();
+                    System.out.println("buferred writer was closed");
+                }
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
             }
@@ -96,6 +99,8 @@ public class ClientHandler implements Runnable {
         for (ClientHandler clientHandler : clientHandlers) {
             try {
                 clientHandler.outputStream.writeObject(namePointsMap);
+                clientHandler.outputStream.flush();
+                clientHandler.outputStream.close();
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
             }

@@ -36,7 +36,7 @@ public class Client {
      */
     public Client(Socket socket, String userName) {
         try {
-            this.socket = socket;
+            Client.socket = socket;
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.userName = userName;
@@ -97,24 +97,7 @@ public class Client {
         listenForQuestionsThread.join();
     }
 
-    public static void listenForRankings() {
-        new Thread(
-                () -> {
-                    while (namePointsMap.isEmpty()) {
-                        try {
-                            InputStream inputStream = socket.getInputStream();
-                            ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                            namePointsMap = (HashMap<String, Integer>) objectInputStream.readObject();
-                            System.out.println(namePointsMap);
-                        } catch (ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                })
-                .start();
-    }
+
 
     /**
      * @param objectInputStream - Stream of received question objects.

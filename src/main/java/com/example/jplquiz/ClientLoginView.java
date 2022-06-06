@@ -76,16 +76,14 @@ public class ClientLoginView implements Initializable {
                     String userName = tfdNickname.getText();
                     client = new Client(socket, userName);
 
-                  try {
-                    client.listenForQuestions();
-                  } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                  }
+                    try {
+                        client.listenForQuestions();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
 
 
-
-                        listenForStart();
-
+                    listenForStart();
 
 
                     if (!nickNameSent) {
@@ -137,6 +135,7 @@ public class ClientLoginView implements Initializable {
             Scene scene = new Scene(questionListLoader.load());
             ClientQuestionView clientQuestionView = questionListLoader.getController();
             clientQuestionView.setClient(client);
+            clientQuestionView.setSocket(socket);
             client.setClientQuestionView(clientQuestionView);
             stage.setScene(scene);
             stage.setResizable(false);
@@ -155,7 +154,7 @@ public class ClientLoginView implements Initializable {
      * questions are sent by the server to the client and the game is ready to start. Once ready
      * the scene is changed to the "client-questionView.fxml" and the game begins.
      */
-    public void listenForStart(){
+    public void listenForStart() {
         BufferedReader bufferedReader = client.getBufferedReader();
         Thread thread = new Thread(
                 () -> {
@@ -166,7 +165,7 @@ public class ClientLoginView implements Initializable {
                                 String[] namesPointsArray = message.split(";");
                                 namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
                                 System.out.println(namePointsMap);
-                            }else if (message.equals("true")) {
+                            } else if (message.equals("true")) {
                                 Platform.runLater(this::changeToClientQuestionView);
                                 Thread.currentThread().interrupt();
                             }
@@ -176,9 +175,6 @@ public class ClientLoginView implements Initializable {
                     }
                 });
         thread.start();
-
-
-
     }
 
     public void setClient(Client client) {

@@ -47,9 +47,6 @@ public class ClientApp extends Application {
       primaryStage.show();
 
 
-
-
-
     } catch (IOException e) {
       e.printStackTrace();
     }
