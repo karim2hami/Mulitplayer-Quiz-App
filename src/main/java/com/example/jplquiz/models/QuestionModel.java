@@ -14,6 +14,7 @@ public class QuestionModel implements Serializable {
   private String answerC;
   private String answerD;
   private String rightAnswer;
+  private String imagePath;
 
   public QuestionModel(
       String question,
@@ -21,13 +22,15 @@ public class QuestionModel implements Serializable {
       String answerB,
       String answerC,
       String answerD,
-      String rightAnswer) {
+      String rightAnswer,
+      String imagePath) {
     this.question = question;
     this.answerA = answerA;
     this.answerB = answerB;
     this.answerC = answerC;
     this.answerD = answerD;
     this.rightAnswer = rightAnswer;
+    this.imagePath = imagePath;
   }
 
   public String getQuestion() {
@@ -78,6 +81,14 @@ public class QuestionModel implements Serializable {
     this.rightAnswer = rightAnswer;
   }
 
+  public String getImagePath() {
+    return imagePath;
+  }
+
+  public void setImagePath(String imagePath) {
+    this.imagePath = imagePath;
+  }
+
   @Override
   public String toString() {
     return "QuestionModel{"
@@ -98,6 +109,9 @@ public class QuestionModel implements Serializable {
         + '\''
         + ", rightAnswer='"
         + rightAnswer
+        + '\''
+        + ", imagePath='"
+        + imagePath
         + '\''
         + '}';
   }
