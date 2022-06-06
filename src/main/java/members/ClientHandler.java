@@ -1,11 +1,8 @@
 package members;
 
 import com.example.jplquiz.ServerClientDashboard;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,103 +10,131 @@ import java.util.List;
 
 public class ClientHandler implements Runnable {
 
-  public static final List<ClientHandler> clientHandlers = new ArrayList<>();
-  private Socket socket;
-  private BufferedReader bufferedReader;
-  private BufferedWriter bufferedWriter;
-  private String clientUsername;
+    public static final List<ClientHandler> clientHandlers = new ArrayList<>();
+    private ObjectOutputStream outputStream;
 
-  private HashMap<String,Integer> namePointsMap = new HashMap<>();
+    private static int index = 0;
+    private Socket socket;
+    private BufferedReader bufferedReader;
+    private BufferedWriter bufferedWriter;
+    private String clientUsername;
 
-  private boolean isStart = false;
+    private static final HashMap<String, Integer> namePointsMap = new HashMap<>();
 
-  private ServerClientDashboard serverClientDashboard;
+    private boolean isStart;
 
-  /**
-   * @param socket <Client Handler that is responsible for communication with Client and Server
-   *     <OutputStream is wrapped with BufferWriter for sending characters and not bytes same is
-   *     <for InputStream
-   */
-  public ClientHandler(Socket socket) {
-    try {
-      this.socket = socket;
-      this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-      this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      this.clientUsername = bufferedReader.readLine();
-      clientHandlers.add(this);
-      broadcastMessage("Server: " + clientUsername + " has entered the game!");
-    } catch (IOException e) {
-      closeEverything(socket, bufferedReader, bufferedWriter);
-    }
-  }
+    private ServerClientDashboard serverClientDashboard;
 
-  @Override // Listens for messages from the Client
-  public void run() {
-    String messageFromClient;
-
-    while (socket.isConnected()) {
-      try {
-        messageFromClient = bufferedReader.readLine();
-        if (!isStart) {
-          serverClientDashboard.addName(messageFromClient);
-        } else{
-          String[] namesPointsArray = messageFromClient.split(";");
-          namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
-          System.out.println("hallo");
+    /**
+     * @param socket <Client Handler that is responsible for communication with Client and Server
+     *               <OutputStream is wrapped with BufferWriter for sending characters and not bytes same is
+     *               <for InputStream
+     */
+    public ClientHandler(Socket socket) {
+        try {
+            this.socket = socket;
+            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+            this.clientUsername = bufferedReader.readLine();
+            clientHandlers.add(this);
+            broadcastMessage("Server: " + clientUsername + " has entered the game!");
+        } catch (IOException e) {
+            closeEverything(socket, bufferedReader, bufferedWriter);
         }
-        System.out.println("isStart" + isStart);
-        broadcastMessage(messageFromClient);
-      } catch (IOException e) {
-        closeEverything(socket, bufferedReader, bufferedWriter);
-        break;
-      }
     }
-  }
 
-  // Send a message to all clients at the same time
-  public void broadcastMessage(String messageToSend) {
+    @Override // Listens for messages from the Client
+    public void run() {
+        String messageFromClient;
 
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
-          if(messageToSend.equals("true")){
-            isStart = true;
-            System.out.println("isStart is set to true");
-          }
-          clientHandler.bufferedWriter.write(messageToSend);
-          // clients wait for the new line
-          clientHandler.bufferedWriter.newLine();
-          clientHandler.bufferedWriter.flush();
-      } catch (IOException e) {
-        closeEverything(socket, bufferedReader, bufferedWriter);
-      }
+        while (socket.isConnected()) {
+            try {
+                messageFromClient = bufferedReader.readLine();
+                if (!isStart) {
+                    serverClientDashboard.addName(messageFromClient);
+                }
+                broadcastMessage(messageFromClient);
+            } catch (IOException e) {
+                closeEverything(socket, bufferedReader, bufferedWriter);
+                break;
+            }
+        }
     }
-  }
 
-  public void removeClientHandler() {
-    clientHandlers.remove(this);
-    broadcastMessage("Server : " + clientUsername + " has left the game!");
-  }
+    // Send a message to all clients at the same time
+    public void broadcastMessage(String messageToSend) {
 
-  public void closeEverything(
-      Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
-    removeClientHandler();
-    try {
-      if (bufferedReader != null) {
-        bufferedReader.close();
-      }
-      if (bufferedWriter != null) {
-        bufferedWriter.close();
-      }
-      if (socket != null) {
-        socket.close();
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+        System.out.println("clienthandler size" + clientHandlers.size());
+
+        System.out.println("message to send" + messageToSend + "\n");
+        for (ClientHandler clientHandler : clientHandlers) {
+            try {
+
+                if (isStart) {
+                    String[] namesPointsArray = messageToSend.split(";");
+                    namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
+                    System.out.println(namePointsMap);
+                    index++;
+                }else if (messageToSend.equals("true")) {
+                    clientHandler.setStart(true);
+                } else if(index == clientHandlers.size()){
+                    broadcastResultMap();
+                }
+                clientHandler.bufferedWriter.write(messageToSend);
+                // clients wait for the new line
+                clientHandler.bufferedWriter.newLine();
+                clientHandler.bufferedWriter.flush();
+            } catch (IOException e) {
+                closeEverything(socket, bufferedReader, bufferedWriter);
+            }
+        }
     }
-  }
+
+    public void broadcastResultMap(){
+
+        for (ClientHandler clientHandler : clientHandlers) {
+            try {
+                clientHandler.outputStream.writeObject(namePointsMap);
+            } catch (IOException e) {
+                closeEverything(socket, bufferedReader, bufferedWriter);
+            }
+        }
+    }
+
+    public void removeClientHandler() {
+        clientHandlers.remove(this);
+        broadcastMessage("Server : " + clientUsername + " has left the game!");
+    }
+
+    public void closeEverything(
+            Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+        removeClientHandler();
+        try {
+            if (bufferedReader != null) {
+                bufferedReader.close();
+            }
+            if (bufferedWriter != null) {
+                bufferedWriter.close();
+            }
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
-  public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
-    this.serverClientDashboard = serverClientDashboard;
-  }
+    public void setServerClientDashboard(ServerClientDashboard serverClientDashboard) {
+        this.serverClientDashboard = serverClientDashboard;
+    }
+
+    public List<ClientHandler> getClientHandlers() {
+        return clientHandlers;
+    }
+
+    public void setStart(boolean start) {
+        isStart = start;
+    }
 }

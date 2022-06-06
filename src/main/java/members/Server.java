@@ -25,9 +25,10 @@ import java.util.List;
  */
 public class Server {
 
-  private ClientHandler clientHandler;
   private final ServerSocket serverSocket;
-  private Socket socket;
+
+  private ClientHandler clientHandler;
+  private List<ClientHandler> clientHandlerList;
   private List<QuestionModel> questionModelList;
   private List<String> listOfClients;
 
@@ -54,23 +55,24 @@ public class Server {
         readQuestions("src/main/resources/Questions/Questions.csv");
 
 
-        sendObject(questionModelList);
+        sendObject(questionModelList, socket);
+
 
         clientHandler = new ClientHandler(socket);
         clientHandler.setServerClientDashboard(serverClientDashboard);
+        clientHandlerList = clientHandler.getClientHandlers();
         Thread thread = new Thread(clientHandler);
         thread.start();
 
 
         serverClientDashboard.setSocket(socket);
-        listenForNames();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  public void sendObject(Object object) throws IOException {
+  public void sendObject(Object object, Socket socket) throws IOException {
     OutputStream outputStream = socket.getOutputStream();
     ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
     objectOutputStream.writeObject(object);
@@ -82,7 +84,10 @@ public class Server {
    *     <p>Thread listening for nicknames, which are being sent by the clients when entering the
    *     game and adding them to the ServerClientDashboard.
    */
-  public void listenForNames() {
+
+
+  /*
+    public void listenForNames() {
     listenForNamesThread =
         new Thread(
             () -> {
@@ -100,27 +105,10 @@ public class Server {
               }
             });
     listenForNamesThread.start();
-  }
+    }
+   */
 
-  public void listenForNamesAndPoints() {
-    listenForNamesAndPointsThread =
-        new Thread(
-            () -> {
-              while (!socket.isClosed()) {
-                try {
-                  BufferedReader bufferedReader =
-                      new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                  String namesPointsString = bufferedReader.readLine();
-                  String[] namesPointsArray = namesPointsString.split(";");
-                  namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
-                  System.out.println("listen for Points Thread");
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
-            });
-    listenForNamesAndPointsThread.start();
-  }
+
 
 
   /**
@@ -192,6 +180,7 @@ public class Server {
   public Thread getListenForNamesThread() {
     return listenForNamesThread;
   }
+
 
   public ClientHandler getClientHandler() {
     return clientHandler;

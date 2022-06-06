@@ -36,12 +36,10 @@ public class ClientApp extends Application {
     try {
       setupSocket();
       FXMLLoader fxmlLoaderStart = new FXMLLoader(getClass().getResource("client-loginView.fxml"));
-      Client client = new Client(socket, String.valueOf(Math.random()));
-      client.listenForQuestions();
+
       Scene scene = new Scene(fxmlLoaderStart.load());
 
       ClientLoginView clientLoginView = fxmlLoaderStart.getController();
-      clientLoginView.setClient(client);
       clientLoginView.setSocket(socket);
 
       primaryStage.setTitle("Multiplayer Quiz App");
