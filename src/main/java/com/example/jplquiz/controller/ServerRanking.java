@@ -3,7 +3,6 @@ package com.example.jplquiz.controller;
 import com.example.jplquiz.models.ClientRankingModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.net.URL;
 import java.util.*;
 
 public class ServerRanking {
@@ -38,15 +36,18 @@ public class ServerRanking {
     private Socket socket;
 
 
-
-
-    public void sortByValue(HashMap<String, Integer> hm) {
+    /**
+     * @author devinhasler, karimtouhami
+     * Sortes a Hasmap into a List that contains ClientRanking Models
+     * @param hm
+     */
+    public void sortByValue(Map<String, Integer> hm) {
         // Create a list from elements of HashMap
         List<Map.Entry<String, Integer>> list =
-                new LinkedList<Map.Entry<String, Integer>>(hm.entrySet());
+                new LinkedList<>(hm.entrySet());
 
         // Sort the list
-        Collections.sort(list, (o1, o2) -> (o1.getValue()).compareTo(o2.getValue()));
+        list.sort((o1, o2) -> (o1.getValue()).compareTo(o2.getValue()));
 
         for (Map.Entry<String, Integer> aa : list) {
             clientRankingModelList.add(new ClientRankingModel(aa.getKey(), aa.getValue()));
@@ -54,7 +55,10 @@ public class ServerRanking {
 
     }
 
-
+    /**
+     * @author devinhasler, karimtouhami
+     * creates Thread that listens for the HasMap that is send by the Cliendhandlers
+     */
     public void listenForRankings() {
         new Thread(
                 () -> {
@@ -75,6 +79,12 @@ public class ServerRanking {
                 })
                 .start();
     }
+
+
+    /**
+     * @author devinhasler, karimtouhami
+     * creates ClientRankingitem and loads them into the positions. Also it creates the podium and filles in the values
+     */
 
     public void createNodeFromItem() {
 
