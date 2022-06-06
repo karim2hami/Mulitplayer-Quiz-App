@@ -15,4 +15,16 @@ public class ClientRankingItem {
   @FXML
   private Label playerRanking;
 
+
+  public void setGameScore(Label gameScore) {
+    this.gameScore = gameScore;
+  }
+
+  public void setPlayerNickName(Label playerNickName) {
+    this.playerNickName = playerNickName;
+  }
+
+  public void setPlayerRanking(Label playerRanking) {
+    this.playerRanking = playerRanking;
+  }
 }

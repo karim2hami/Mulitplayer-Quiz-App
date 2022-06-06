@@ -2,6 +2,7 @@ package com.example.jplquiz;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -35,20 +36,15 @@ public class ClientApp extends Application {
     try {
       setupSocket();
       FXMLLoader fxmlLoaderStart = new FXMLLoader(getClass().getResource("client-loginView.fxml"));
-      Client client = new Client(socket, String.valueOf(Math.random()));
-      client.listenForQuestions();
+
       Scene scene = new Scene(fxmlLoaderStart.load());
 
       ClientLoginView clientLoginView = fxmlLoaderStart.getController();
-      clientLoginView.setClient(client);
       clientLoginView.setSocket(socket);
 
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
-
-
-
 
 
     } catch (IOException e) {
