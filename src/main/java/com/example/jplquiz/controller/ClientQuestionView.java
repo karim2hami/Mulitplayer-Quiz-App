@@ -269,7 +269,7 @@ public class ClientQuestionView implements Initializable {
   void changeToServerRanking() {
     try {
       Stage stage = new Stage();
-      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("server-Ranking.fxml"));
+      FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/server-ranking.fxml"));
       Scene scene = new Scene(fxmlLoader.load());
       stage.setScene(scene);
       stage.setResizable(false);
