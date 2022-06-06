@@ -250,6 +250,10 @@ public class ClientQuestionView implements Initializable {
                 1000);
     }
 
+    /**
+     * @author karimtouhami
+     * makes a total gui timout
+     */
     public void timeOut() {
         try {
             Thread.sleep(500);
@@ -258,6 +262,11 @@ public class ClientQuestionView implements Initializable {
         }
     }
 
+
+    /**
+     * @author karimtouhami
+     * Changes UI from ClientQuestionView to ServerRanking and initialises listenForRankings
+     */
     @FXML
     void changeToServerRanking() {
         try {

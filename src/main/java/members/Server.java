@@ -72,42 +72,21 @@ public class Server {
     }
   }
 
+
+  /**
+   * @author devinhasler
+   * @param object
+   * @param socket
+   * @throws IOException
+   *  <p>
+   *      Sends ClientquestionModelList to all the Clients
+   *  </p>
+   */
   public void sendObject(Object object, Socket socket) throws IOException {
     OutputStream outputStream = socket.getOutputStream();
     ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
     objectOutputStream.writeObject(object);
   }
-
-
-  /**
-   * @author devinhasler
-   *     <p>Thread listening for nicknames, which are being sent by the clients when entering the
-   *     game and adding them to the ServerClientDashboard.
-   */
-
-
-  /*
-    public void listenForNames() {
-    listenForNamesThread =
-        new Thread(
-            () -> {
-              while (!socket.isClosed() && !serverClientDashboard.isStart()
-                  && !listenForNamesThread.isInterrupted()) {
-                try {
-                  BufferedReader bufferedReader =
-                      new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                  String object = bufferedReader.readLine();
-                  listOfClients.add(object);
-                  serverClientDashboard.addName(object);
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
-            });
-    listenForNamesThread.start();
-    }
-   */
-
 
 
 
