@@ -2,9 +2,6 @@ package com.example.jplquiz.controller;
 
 import com.example.jplquiz.models.QuestionModel;
 import java.io.BufferedWriter;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import members.Client;
 
@@ -66,7 +64,6 @@ public class ClientQuestionView implements Initializable {
    */
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-
 
     // initialize Timer
     timer = new Timer();
@@ -190,7 +187,7 @@ public class ClientQuestionView implements Initializable {
   public void loadQuestionFromList() {
 
     if (questionsNumber < questionModels.size()) {
-      lbQuestionCounter.setText((questionsNumber) + " von " + (questionModels.size()-1));
+      lbQuestionCounter.setText((questionsNumber) + " von " + (questionModels.size() - 1));
       QuestionModel questionModel = questionModels.get(questionsNumber);
       lbQuestion.setText(questionModel.getQuestion());
       btnA.setText(questionModel.getAnswerA());
@@ -198,7 +195,8 @@ public class ClientQuestionView implements Initializable {
       btnC.setText(questionModel.getAnswerC());
       btnD.setText(questionModel.getAnswerD());
       rightAnswer = questionModel.getRightAnswer();
-
+      imgQuestion.setImage(new Image(
+          String.valueOf(getClass().getResource(questionModel.getImagePath()))));
       countDownTimer();
       questionsNumber++;
 

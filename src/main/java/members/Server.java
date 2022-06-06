@@ -160,15 +160,16 @@ public class Server {
    * @return QuestionModel
    */
   public static QuestionModel createQuestionModel(String[] data) {
-    if (data.length >= 5) {
+    if (data.length >= 6) {
       String question = data[0];
       String answerA = data[1];
       String answerB = data[2];
       String answerC = data[3];
       String answerD = data[4];
       String rightAnswer = data[5];
+      String imagePath = data[6];
 
-      return new QuestionModel(question, answerA, answerB, answerC, answerD, rightAnswer);
+      return new QuestionModel(question, answerA, answerB, answerC, answerD, rightAnswer, imagePath);
     }
     return null;
   }
