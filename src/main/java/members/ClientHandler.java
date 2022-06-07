@@ -5,25 +5,20 @@ import com.example.jplquiz.ServerClientDashboard;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * @author karim2hami
  *     <p>ClientHandler: Handles the connection and communication between Server and all Clients.
  */
-public class ClientHandler implements Runnable {
+public class ClientHandler implements Runnable, Serializable {
 
   public static final List<ClientHandler> clientHandlers = new ArrayList<>();
-  private ObjectOutputStream outputStream;
 
-  private static int index = 0;
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
   private String clientUsername;
-
-  private static final HashMap<String, Integer> namePointsMap = new HashMap<>();
 
   private boolean isStart;
 
@@ -39,7 +34,6 @@ public class ClientHandler implements Runnable {
       this.socket = socket;
       this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
       this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      this.outputStream = new ObjectOutputStream(socket.getOutputStream());
       this.clientUsername = bufferedReader.readLine();
       clientHandlers.add(this);
       broadcastMessage("Server: " + clientUsername + " has entered the game!");
@@ -78,51 +72,25 @@ public class ClientHandler implements Runnable {
   // Send a message to all clients at the same time
   public void broadcastMessage(String messageToSend) {
 
-    System.out.println("clienthandler size" + clientHandlers.size());
-
     System.out.println("message to send" + messageToSend + "\n");
     for (ClientHandler clientHandler : clientHandlers) {
       try {
 
-        if (isStart) {
-          String[] namesPointsArray = messageToSend.split(";");
-          namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
-          System.out.println(namePointsMap);
-          index++;
-        } else if (messageToSend.equals("true")) {
+        if (messageToSend.equals("true")) {
           clientHandler.setStart(true);
         }
         clientHandler.bufferedWriter.write(messageToSend);
         // clients wait for the new line
         clientHandler.bufferedWriter.newLine();
         clientHandler.bufferedWriter.flush();
-        if (index == clientHandlers.size()) {
-          clientHandler.bufferedWriter.close();
-          broadcastResultMap();
-          System.out.println("buferred writer was closed");
-        }
+
       } catch (IOException e) {
         closeEverything(socket, bufferedReader, bufferedWriter);
       }
     }
   }
 
-  /**
-   * @author karimtouhami
-   *     <p>Broadcasts the HashMap with all names and scores to each of the Clients ClientHandlers.
-   */
-  public void broadcastResultMap() {
 
-    for (ClientHandler clientHandler : clientHandlers) {
-      try {
-        clientHandler.outputStream.writeObject(namePointsMap);
-        clientHandler.outputStream.flush();
-        clientHandler.outputStream.close();
-      } catch (IOException e) {
-        closeEverything(socket, bufferedReader, bufferedWriter);
-      }
-    }
-  }
 
   /**
    * @author karimtouhami
@@ -162,11 +130,17 @@ public class ClientHandler implements Runnable {
     this.serverClientDashboard = serverClientDashboard;
   }
 
+
+
+  public void setStart(boolean start) {
+    isStart = start;
+  }
+
   public List<ClientHandler> getClientHandlers() {
     return clientHandlers;
   }
 
-  public void setStart(boolean start) {
-    isStart = start;
+  public Socket getSocket() {
+    return socket;
   }
 }
