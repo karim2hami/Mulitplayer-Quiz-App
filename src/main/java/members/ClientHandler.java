@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * @author karim2hami
+ * @author karimtouhami
  *     <p>ClientHandler: Handles the connection and communication between Server and all Clients.
  */
 public class ClientHandler implements Runnable {
