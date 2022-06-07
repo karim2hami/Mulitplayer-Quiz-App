@@ -119,7 +119,7 @@ public class Client {
      * <p>Transfers the list of questionmodels to the ClientQuestionView GUI, which are then
      * stored as a variable.
      */
-    public void transferQuestions() {
+    public void transferQuestions() throws InterruptedException {
         clientQuestionView.setSocket(socket);
         clientQuestionView.setQuestionModels(questionModelList);
         if (questionModelList != null) {

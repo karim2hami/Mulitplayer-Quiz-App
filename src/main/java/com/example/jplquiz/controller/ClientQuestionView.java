@@ -87,20 +87,21 @@ public class ClientQuestionView implements Initializable {
                     // Validate value
                     if (btnA.getText().equals(rightAnswer)) {
                         System.out.println(RIGHT_ANSWER);
-                        btnA.setStyle("-fx-background-color: green");
                         answers.add(true);
                         correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
                     } else {
                         System.out.println(WRONG_ANSWER);
-                        btnA.setStyle("-fx-background-color: red");
                         answers.add(false);
                         falseAnswers++;
                     }
+
+                        showColorSolution();
+
                     // Stop Timer and initialize a new one
-                    timer.cancel();
                     timeOut();
+                    timer.cancel();
                     timer = new Timer();
                     // loadNewQuestion
                     loadQuestionFromList();
@@ -111,16 +112,17 @@ public class ClientQuestionView implements Initializable {
                     System.out.println("Button B was pressed...");
                     // Validate value
                     if (btnB.getText().equals(rightAnswer)) {
-                        btnB.setStyle("-fx-background-color: green");
                         answers.add(true);
                         correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
                     } else {
-                        btnB.setStyle("-fx-background-color: red");
                         answers.add(false);
                         falseAnswers++;
                     }
+
+                    showColorSolution();
+
                     // Stop Timer and initialize a new one
                     timer.cancel();
                     timeOut();
@@ -157,23 +159,51 @@ public class ClientQuestionView implements Initializable {
                 actionEvent -> {
                     // Validate value
                     if (btnD.getText().equals(rightAnswer)) {
-                        btnD.setStyle("-fx-background-color: green");
                         answers.add(true);
                         correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
                     } else {
-                        btnD.setStyle("-fx-background-color: red");
                         answers.add(false);
                         falseAnswers++;
                     }
+
+                    showColorSolution();
+
                     // Stop Timer and initialize a new one
+
                     timer.cancel();
                     timeOut();
                     timer = new Timer();
                     // loadNewQuestion
                     loadQuestionFromList();
                 });
+    }
+
+
+
+    public void showColorSolution() {
+        if(btnA.getText().equals(rightAnswer)){
+            btnA.setStyle("-fx-background-color: green");
+            btnB.setStyle("-fx-background-color: red");
+            btnC.setStyle("-fx-background-color: red");
+            btnD.setStyle("-fx-background-color: red");
+        } else if (btnB.getText().equals(rightAnswer)){
+            btnA.setStyle("-fx-background-color: red");
+            btnB.setStyle("-fx-background-color: green");
+            btnC.setStyle("-fx-background-color: red");
+            btnD.setStyle("-fx-background-color: red");
+        } else if(btnC.getText().equals(rightAnswer)){
+            btnA.setStyle("-fx-background-color: red");
+            btnB.setStyle("-fx-background-color: red");
+            btnC.setStyle("-fx-background-color: green");
+            btnD.setStyle("-fx-background-color: red");
+        } else {
+            btnA.setStyle("-fx-background-color: red");
+            btnB.setStyle("-fx-background-color: red");
+            btnC.setStyle("-fx-background-color: red");
+            btnD.setStyle("-fx-background-color: green");
+        }
     }
 
     /**
@@ -199,10 +229,13 @@ public class ClientQuestionView implements Initializable {
     @FXML
     public void loadQuestionFromList() {
 
+        /*
         btnA.setStyle("-fx-background-color: #FF006E");
         btnB.setStyle("-fx-background-color: #3A86FF");
         btnC.setStyle("-fx-background-color: #FFBE0B");
         btnD.setStyle("-fx-background-color: #FB5607");
+         */
+
 
         if (questionsNumber < questionModels.size()) {
             lbQuestionCounter.setText((questionsNumber) + " von " + (questionModels.size() - 1));
