@@ -1,6 +1,11 @@
 package com.example.jplquiz;
 
 import com.example.jplquiz.controller.ClientNickNameItem;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
@@ -12,14 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import members.ClientHandler;
 import members.Server;
-
-import java.io.IOException;
-import java.net.Socket;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 /**
  * @author karimtouhami

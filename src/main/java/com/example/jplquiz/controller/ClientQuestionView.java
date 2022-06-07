@@ -228,14 +228,14 @@ public class ClientQuestionView implements Initializable {
         if (questionsNumber < questionModels.size()) {
             lbQuestionCounter.setText((questionsNumber) + " von " + (questionModels.size() - 1));
             QuestionModel questionModel = questionModels.get(questionsNumber);
-            lbQuestion.setText(questionModel.getQuestion());
-            btnA.setText(questionModel.getAnswerA());
-            btnB.setText(questionModel.getAnswerB());
-            btnC.setText(questionModel.getAnswerC());
-            btnD.setText(questionModel.getAnswerD());
-            rightAnswer = questionModel.getRightAnswer();
+            lbQuestion.setText(questionModel.question());
+            btnA.setText(questionModel.answerA());
+            btnB.setText(questionModel.answerB());
+            btnC.setText(questionModel.answerC());
+            btnD.setText(questionModel.answerD());
+            rightAnswer = questionModel.rightAnswer();
             imgQuestion.setImage(new Image(
-                    String.valueOf(getClass().getResource(questionModel.getImagePath()))));
+                    String.valueOf(getClass().getResource(questionModel.imagePath()))));
             countDownTimer();
             questionsNumber++;
 

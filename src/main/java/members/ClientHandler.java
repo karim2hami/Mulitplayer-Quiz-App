@@ -11,17 +11,16 @@ import java.util.List;
  * @author karimtouhami
  *     <p>ClientHandler: Handles the connection and communication between Server and all Clients.
  */
+@SuppressWarnings("DuplicatedCode")
 public class ClientHandler implements Runnable, Serializable {
 
-  public static final List<ClientHandler> clientHandlers = new ArrayList<>();
-
+  protected static final List<ClientHandler> clientHandlers = new ArrayList<>();
   private Socket socket;
   private BufferedReader bufferedReader;
   private BufferedWriter bufferedWriter;
   private String clientUsername;
 
   private boolean isStart;
-
   private ServerClientDashboard serverClientDashboard;
 
   /**
@@ -90,8 +89,6 @@ public class ClientHandler implements Runnable, Serializable {
     }
   }
 
-
-
   /**
    * @author karimtouhami
    *     <p>Removes a client from the ClientHandler List.
@@ -104,9 +101,9 @@ public class ClientHandler implements Runnable, Serializable {
   /**
    * @author karimtouhami
    *     <p>Closes all running sockets, connections, readers and writers.
-   * @param socket
-   * @param bufferedReader
-   * @param bufferedWriter
+   * @param socket - socket for connection to Server
+   * @param bufferedReader - bufferedReader to read messages from stream
+   * @param bufferedWriter - bufferedWriter to write messages to stream
    */
   public void closeEverything(
       Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
@@ -130,17 +127,11 @@ public class ClientHandler implements Runnable, Serializable {
     this.serverClientDashboard = serverClientDashboard;
   }
 
-
-
   public void setStart(boolean start) {
     isStart = start;
   }
 
   public List<ClientHandler> getClientHandlers() {
     return clientHandlers;
-  }
-
-  public Socket getSocket() {
-    return socket;
   }
 }

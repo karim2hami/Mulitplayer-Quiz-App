@@ -89,12 +89,12 @@ public class ServerRanking implements Serializable {
 
     public void createNodeFromItem() {
 
-        labelRankOne.setText(String.valueOf(clientRankingModelList.get(0).getPlayerNickName() + " " + clientRankingModelList.get(0).getPlayerScore()));
+        labelRankOne.setText(String.valueOf(clientRankingModelList.get(0).playerNickName() + " " + clientRankingModelList.get(0).playerScore()));
         if (clientRankingModelList.size() == 2) {
-            labelRankTwo.setText(String.valueOf(clientRankingModelList.get(1).getPlayerNickName() + " " + clientRankingModelList.get(1).getPlayerScore()));
+            labelRankTwo.setText(String.valueOf(clientRankingModelList.get(1).playerNickName() + " " + clientRankingModelList.get(1).playerScore()));
         } else if (clientRankingModelList.size() == 3) {
-            labelRankTwo.setText(String.valueOf(clientRankingModelList.get(1).getPlayerNickName() + " " + clientRankingModelList.get(1).getPlayerScore()));
-            labelRankThree.setText(String.valueOf(clientRankingModelList.get(2).getPlayerNickName() + " " + clientRankingModelList.get(2).getPlayerScore()));
+            labelRankTwo.setText(String.valueOf(clientRankingModelList.get(1).playerNickName() + " " + clientRankingModelList.get(1).playerScore()));
+            labelRankThree.setText(String.valueOf(clientRankingModelList.get(2).playerNickName() + " " + clientRankingModelList.get(2).playerScore()));
         }
     }
 
