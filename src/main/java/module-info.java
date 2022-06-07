@@ -7,5 +7,7 @@ module com.example.jplquiz {
 
   exports com.example.jplquiz;
   exports com.example.jplquiz.controller;
+  exports com.example.jplquiz.members;
+  exports com.example.jplquiz.models;
   opens com.example.jplquiz.controller to javafx.fxml;
 }

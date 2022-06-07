@@ -1,11 +1,10 @@
 package com.example.jplquiz;
 
 import com.example.jplquiz.controller.ClientQuestionView;
+import com.example.jplquiz.members.Client;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.net.Socket;
 import java.net.URL;
 import java.util.HashMap;
@@ -23,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import members.Client;
 
 /**
  * @author karimtouhami ClientLoginView: Controller class for the login GUI "client-loginView.fxml".
@@ -40,9 +38,8 @@ public class ClientLoginView implements Initializable {
   private Socket socket;
   private Client client;
   private FXMLLoader questionListLoader;
-  private boolean isStart = false;
+  private static final boolean IS_START = false;
   private boolean nickNameSent = false;
-  private Logger logger;
   private static final HashMap<String, Integer> namePointsMap = new HashMap<>();
 
   /**
@@ -73,7 +70,6 @@ public class ClientLoginView implements Initializable {
           try {
             client.listenForQuestions();
           } catch (InterruptedException e) {
-            logger.log(Level.WARNING, "Interrupted!", e);
             // Restore interrupted state...
             Thread.currentThread().interrupt();
           }
@@ -86,7 +82,7 @@ public class ClientLoginView implements Initializable {
             client.sendMessage();
             sendNickName(userName);
 
-          } else if (isStart) {
+          } else if (IS_START) {
             changeToClientQuestionView();
           }
         });
@@ -134,10 +130,6 @@ public class ClientLoginView implements Initializable {
       client.transferQuestions();
     } catch (IOException e) {
       e.printStackTrace();
-    } catch (InterruptedException e) {
-      logger.log(Level.WARNING, "Interrupted!", e);
-      // Restore interrupted state...
-      Thread.currentThread().interrupt();
     }
     Stage clientLoginView = (Stage) btnEnter.getScene().getWindow();
     clientLoginView.close();
@@ -156,7 +148,7 @@ public class ClientLoginView implements Initializable {
               while (socket.isConnected() && !Thread.currentThread().isInterrupted()) {
                 try {
                   String message = bufferedReader.readLine();
-                  if (isStart) {
+                  if (IS_START) {
                     String[] namesPointsArray = message.split(";");
                     namePointsMap.put(namesPointsArray[0], Integer.parseInt(namesPointsArray[1]));
                     System.out.println(namePointsMap);
@@ -174,9 +166,5 @@ public class ClientLoginView implements Initializable {
 
   public void setSocket(Socket socket) {
     this.socket = socket;
-  }
-
-  public void setStart(boolean start) {
-    isStart = start;
   }
 }

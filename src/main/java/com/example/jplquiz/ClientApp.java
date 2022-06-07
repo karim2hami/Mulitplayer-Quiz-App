@@ -2,12 +2,10 @@ package com.example.jplquiz;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import members.Client;
 
 /**
  * @author karimtouhami ClientApp: Starts a new JavaFX application that loads the
@@ -45,7 +43,6 @@ public class ClientApp extends Application {
       primaryStage.setTitle("Multiplayer Quiz App");
       primaryStage.setScene(scene);
       primaryStage.show();
-
 
     } catch (IOException e) {
       e.printStackTrace();

@@ -1,4 +1,4 @@
-package members;
+package com.example.jplquiz.members;
 
 import com.example.jplquiz.ServerClientDashboard;
 import java.io.IOException;

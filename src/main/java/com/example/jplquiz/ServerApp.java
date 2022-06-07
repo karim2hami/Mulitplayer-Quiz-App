@@ -1,11 +1,11 @@
 package com.example.jplquiz;
 
+import com.example.jplquiz.members.ServerThread;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import members.ServerThread;
 
 /**
  * @author karimtouhami ServerApp: Starts a new JavaFX application that loads the

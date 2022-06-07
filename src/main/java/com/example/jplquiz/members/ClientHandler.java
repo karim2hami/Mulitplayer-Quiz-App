@@ -1,8 +1,11 @@
-package members;
+package com.example.jplquiz.members;
 
 import com.example.jplquiz.ServerClientDashboard;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,7 @@ import java.util.List;
  *     <p>ClientHandler: Handles the connection and communication between Server and all Clients.
  */
 @SuppressWarnings("DuplicatedCode")
-public class ClientHandler implements Runnable, Serializable {
+public class ClientHandler implements Runnable {
 
   protected static final List<ClientHandler> clientHandlers = new ArrayList<>();
   private Socket socket;
@@ -129,9 +132,5 @@ public class ClientHandler implements Runnable, Serializable {
 
   public void setStart(boolean start) {
     isStart = start;
-  }
-
-  public List<ClientHandler> getClientHandlers() {
-    return clientHandlers;
   }
 }

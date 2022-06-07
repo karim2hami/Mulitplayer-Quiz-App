@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
@@ -7,41 +8,45 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
-
-
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="514.0" style="-fx-background-color: #612CB9#612CB9; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #612CB9#612CB9;" />
-      <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #ffffff;">
-         <children>
-            <Label fx:id="playerRanking" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="34.0" text="1.">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" top="30.0" />
-               </HBox.margin>
-            </Label>
-            <Label fx:id="playerNickName" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="179.0" text="Devin">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="30.0" />
-               </HBox.margin>
-            </Label>
-            <Label fx:id="gameScore" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="181.0" text="29585">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="60.0" top="30.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-         <effect>
-            <DropShadow />
-         </effect>
-      </HBox>
-   </children>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+  prefHeight="84.0" prefWidth="514.0"
+  style="-fx-background-color: #612CB9#612CB9; -fx-background-radius: 10; -fx-border-radius: 10;"
+  xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #612CB9#612CB9;"/>
+   <HBox prefHeight="100.0" prefWidth="200.0"
+     style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #ffffff;">
+      <effect>
+         <DropShadow/>
+      </effect>
+      <Label fx:id="playerRanking" maxHeight="-Infinity" maxWidth="-Infinity"
+        minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="34.0" text="1.">
+         <font>
+            <Font name="System Bold" size="18.0"/>
+         </font>
+         <HBox.margin>
+            <Insets left="20.0" right="20.0" top="30.0"/>
+         </HBox.margin>
+      </Label>
+      <Label fx:id="playerNickName" maxHeight="-Infinity" maxWidth="-Infinity"
+        minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="179.0"
+        text="Devin">
+         <font>
+            <Font size="18.0"/>
+         </font>
+         <HBox.margin>
+            <Insets top="30.0"/>
+         </HBox.margin>
+      </Label>
+      <Label fx:id="gameScore" alignment="CENTER_RIGHT" maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity" minWidth="-Infinity" prefHeight="23.0" prefWidth="181.0"
+        text="29585">
+         <font>
+            <Font size="18.0"/>
+         </font>
+         <HBox.margin>
+            <Insets left="60.0" top="30.0"/>
+         </HBox.margin>
+      </Label>
+   </HBox>
 </StackPane>
