@@ -5,7 +5,6 @@ import com.example.jplquiz.models.QuestionModel;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,8 +21,6 @@ public class Client {
     private String userName;
     private List<QuestionModel> questionModelList;
     private ClientQuestionView clientQuestionView;
-
-    private static HashMap<String, Integer> namePointsMap = new HashMap<>();
 
     private Thread listenForQuestionsThread;
 
@@ -119,7 +116,7 @@ public class Client {
      * <p>Transfers the list of questionmodels to the ClientQuestionView GUI, which are then
      * stored as a variable.
      */
-    public void transferQuestions() throws InterruptedException {
+    public void transferQuestions() {
         clientQuestionView.setSocket(socket);
         clientQuestionView.setQuestionModels(questionModelList);
         if (questionModelList != null) {
