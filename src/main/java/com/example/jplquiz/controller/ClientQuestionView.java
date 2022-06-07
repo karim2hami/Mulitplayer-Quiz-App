@@ -12,11 +12,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import members.Client;
-import java.io.BufferedWriter;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author devinhasler ClientQuestionView: Controller Class of client-questionView.fxml Displays the
@@ -46,20 +49,12 @@ public class ClientQuestionView implements Initializable {
     private Label lbQuestionCounter;
 
     private Client client;
-
-    private BufferedWriter bufferedWriter;
     private List<QuestionModel> questionModels;
-    private final List<Boolean> answers = new ArrayList<>();
     private Socket socket;
     private int playerScore = 0;
-    private int falseAnswers = 0;
-    private int correctAnswers = 0;
     private int questionsNumber = 1;
     private String rightAnswer;
     private Timer timer;
-
-    private static final String RIGHT_ANSWER = "Right Answer!";
-    private static final String WRONG_ANSWER = "WRONG ANSWER...";
 
     /**
      * @param url            - The location used to resolve relative paths for the root object, or null if the
@@ -85,15 +80,8 @@ public class ClientQuestionView implements Initializable {
                     System.out.println("Button A was pressed...");
                     // Validate value
                     if (btnA.getText().equals(rightAnswer)) {
-                        System.out.println(RIGHT_ANSWER);
-                        answers.add(true);
-                        correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
-                    } else {
-                        System.out.println(WRONG_ANSWER);
-                        answers.add(false);
-                        falseAnswers++;
                     }
                     countdownSolutionTimer();
 
@@ -108,13 +96,8 @@ public class ClientQuestionView implements Initializable {
                     System.out.println("Button B was pressed...");
                     // Validate value
                     if (btnB.getText().equals(rightAnswer)) {
-                        answers.add(true);
-                        correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
-                    } else {
-                        answers.add(false);
-                        falseAnswers++;
                     }
                    countdownSolutionTimer();
 
@@ -129,16 +112,8 @@ public class ClientQuestionView implements Initializable {
 
                     // Validate value
                     if (btnC.getText().equals(rightAnswer)) {
-                        btnC.setStyle("-fx-background-color: green");
-
-                        answers.add(true);
-                        correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
-                    } else {
-                        btnC.setStyle("-fx-background-color: red");
-                        answers.add(false);
-                        falseAnswers++;
                     }
                     countdownSolutionTimer();
                     // Stop Timer and initialize a new one
@@ -151,15 +126,9 @@ public class ClientQuestionView implements Initializable {
                 actionEvent -> {
                     // Validate value
                     if (btnD.getText().equals(rightAnswer)) {
-                        answers.add(true);
-                        correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
-                    } else {
-                        answers.add(false);
-                        falseAnswers++;
                     }
-
                     countdownSolutionTimer();
                     // Stop Timer and initialize a new one
 
@@ -175,26 +144,29 @@ public class ClientQuestionView implements Initializable {
      * gives the GUI Buttons the right colors so that the user recieves a recall for his answer
      */
     public void showColorSolution() {
+        String greenColor = "-fx-background-color: green";
+        String redColor = "-fx-background-color: red";
+
         if (btnA.getText().equals(rightAnswer)) {
-            btnA.setStyle("-fx-background-color: green");
-            btnB.setStyle("-fx-background-color: red");
-            btnC.setStyle("-fx-background-color: red");
-            btnD.setStyle("-fx-background-color: red");
+            btnA.setStyle(greenColor);
+            btnB.setStyle(redColor);
+            btnC.setStyle(redColor);
+            btnD.setStyle(redColor);
         } else if (btnB.getText().equals(rightAnswer)) {
-            btnA.setStyle("-fx-background-color: red");
-            btnB.setStyle("-fx-background-color: green");
-            btnC.setStyle("-fx-background-color: red");
-            btnD.setStyle("-fx-background-color: red");
+            btnA.setStyle(redColor);
+            btnB.setStyle(greenColor);
+            btnC.setStyle(redColor);
+            btnD.setStyle(redColor);
         } else if (btnC.getText().equals(rightAnswer)) {
-            btnA.setStyle("-fx-background-color: red");
-            btnB.setStyle("-fx-background-color: red");
-            btnC.setStyle("-fx-background-color: green");
-            btnD.setStyle("-fx-background-color: red");
+            btnA.setStyle(redColor);
+            btnB.setStyle(redColor);
+            btnC.setStyle(greenColor);
+            btnD.setStyle(redColor);
         } else {
-            btnA.setStyle("-fx-background-color: red");
-            btnB.setStyle("-fx-background-color: red");
-            btnC.setStyle("-fx-background-color: red");
-            btnD.setStyle("-fx-background-color: green");
+            btnA.setStyle(redColor);
+            btnB.setStyle(redColor);
+            btnC.setStyle(redColor);
+            btnD.setStyle(greenColor);
         }
     }
 
