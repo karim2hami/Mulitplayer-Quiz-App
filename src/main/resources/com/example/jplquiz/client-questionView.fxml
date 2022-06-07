@@ -17,29 +17,32 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.jplquiz.controller.ClientQuestionView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.jplquiz.controller.ClientQuestionView">
 
   <BorderPane prefHeight="898.0" prefWidth="1270.0" style="-fx-background-color: #612CB9;">
     <top>
-      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="93.0" prefWidth="1108.0" BorderPane.alignment="CENTER">
         <BorderPane.margin>
           <Insets bottom="20.0" top="20.0" />
         </BorderPane.margin>
-        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="1000.0" style="-fx-background-color: #FFFF; -fx-background-radius: 5;" />
-        <HBox prefHeight="100.0" prefWidth="200.0">
+        <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="89.0" prefWidth="1106.0" style="-fx-background-color: #FFFF; -fx-background-radius: 5;" />
+        <HBox prefHeight="82.0" prefWidth="1026.0">
           <padding>
             <Insets left="20.0" />
           </padding>
-          <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="900.0">
+          <HBox alignment="CENTER_LEFT" prefHeight="94.0" prefWidth="1074.0">
             <opaqueInsets>
               <Insets />
             </opaqueInsets>
-            <Label fx:id="lbQuestionCounter" text="Question 1 of 20">
+            <Label fx:id="lbQuestionCounter" prefHeight="35.0" prefWidth="147.0" text="1 von 20">
               <font>
                 <Font size="24.0" />
               </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
             </Label>
-            <Label fx:id="lbQuestion" text="What is the capital city of Switzerland?">
+            <Label fx:id="lbQuestion" prefHeight="35.0" prefWidth="818.0" text="What is the capital city of Switzerland?">
               <font>
                 <Font size="24.0" />
               </font>
@@ -47,15 +50,18 @@
                 <Insets left="50.0" right="50.0" />
               </HBox.margin>
             </Label>
+             <Label fx:id="lbPlayerPoints" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="35.0" prefWidth="127.0" text="0">
+               <font>
+                 <Font size="24.0" />
+               </font>
+               <HBox.margin>
+                 <Insets />
+               </HBox.margin>
+             </Label>
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
           </HBox>
-          <Label fx:id="lbPlayerPoints" alignment="CENTER" contentDisplay="CENTER" text="0">
-            <font>
-              <Font size="24.0" />
-            </font>
-            <HBox.margin>
-              <Insets top="25.0" />
-            </HBox.margin>
-          </Label>
         </HBox>
       </StackPane>
     </top>
