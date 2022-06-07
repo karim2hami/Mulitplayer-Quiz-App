@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import members.Client;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
@@ -87,23 +86,21 @@ public class ClientQuestionView implements Initializable {
                     // Validate value
                     if (btnA.getText().equals(rightAnswer)) {
                         System.out.println(RIGHT_ANSWER);
-                        btnA.setStyle("-fx-background-color: green");
                         answers.add(true);
                         correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
                     } else {
                         System.out.println(WRONG_ANSWER);
-                        btnA.setStyle("-fx-background-color: red");
                         answers.add(false);
                         falseAnswers++;
                     }
+                    countdownSolutionTimer();
+
                     // Stop Timer and initialize a new one
                     timer.cancel();
-                    timeOut();
                     timer = new Timer();
                     // loadNewQuestion
-                    loadQuestionFromList();
                 });
 
         btnB.setOnMouseClicked(
@@ -111,22 +108,20 @@ public class ClientQuestionView implements Initializable {
                     System.out.println("Button B was pressed...");
                     // Validate value
                     if (btnB.getText().equals(rightAnswer)) {
-                        btnB.setStyle("-fx-background-color: green");
                         answers.add(true);
                         correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
                     } else {
-                        btnB.setStyle("-fx-background-color: red");
                         answers.add(false);
                         falseAnswers++;
                     }
+                   countdownSolutionTimer();
+
                     // Stop Timer and initialize a new one
                     timer.cancel();
-                    timeOut();
                     timer = new Timer();
                     // loadNewQuestion
-                    loadQuestionFromList();
                 });
 
         btnC.setOnMouseClicked(
@@ -145,35 +140,62 @@ public class ClientQuestionView implements Initializable {
                         answers.add(false);
                         falseAnswers++;
                     }
+                    countdownSolutionTimer();
                     // Stop Timer and initialize a new one
                     timer.cancel();
-                    timeOut();
                     timer = new Timer();
                     // loadNewQuestion
-                    loadQuestionFromList();
                 });
 
         btnD.setOnMouseClicked(
                 actionEvent -> {
                     // Validate value
                     if (btnD.getText().equals(rightAnswer)) {
-                        btnD.setStyle("-fx-background-color: green");
                         answers.add(true);
                         correctAnswers++;
                         playerScore += Integer.parseInt(lbCountDown.getText()) * 100;
                         lbPlayerPoints.setText(String.valueOf(playerScore));
                     } else {
-                        btnD.setStyle("-fx-background-color: red");
                         answers.add(false);
                         falseAnswers++;
                     }
+
+                    countdownSolutionTimer();
                     // Stop Timer and initialize a new one
+
                     timer.cancel();
-                    timeOut();
                     timer = new Timer();
                     // loadNewQuestion
-                    loadQuestionFromList();
                 });
+    }
+
+
+    /**
+     * @author devinhasler
+     * gives the GUI Buttons the right colors so that the user recieves a recall for his answer
+     */
+    public void showColorSolution() {
+        if (btnA.getText().equals(rightAnswer)) {
+            btnA.setStyle("-fx-background-color: green");
+            btnB.setStyle("-fx-background-color: red");
+            btnC.setStyle("-fx-background-color: red");
+            btnD.setStyle("-fx-background-color: red");
+        } else if (btnB.getText().equals(rightAnswer)) {
+            btnA.setStyle("-fx-background-color: red");
+            btnB.setStyle("-fx-background-color: green");
+            btnC.setStyle("-fx-background-color: red");
+            btnD.setStyle("-fx-background-color: red");
+        } else if (btnC.getText().equals(rightAnswer)) {
+            btnA.setStyle("-fx-background-color: red");
+            btnB.setStyle("-fx-background-color: red");
+            btnC.setStyle("-fx-background-color: green");
+            btnD.setStyle("-fx-background-color: red");
+        } else {
+            btnA.setStyle("-fx-background-color: red");
+            btnB.setStyle("-fx-background-color: red");
+            btnC.setStyle("-fx-background-color: red");
+            btnD.setStyle("-fx-background-color: green");
+        }
     }
 
     /**
@@ -198,7 +220,6 @@ public class ClientQuestionView implements Initializable {
      */
     @FXML
     public void loadQuestionFromList() {
-
         btnA.setStyle("-fx-background-color: #FF006E");
         btnB.setStyle("-fx-background-color: #3A86FF");
         btnC.setStyle("-fx-background-color: #FFBE0B");
@@ -243,6 +264,8 @@ public class ClientQuestionView implements Initializable {
                             count--;
                         } else {
                             timer.cancel();
+
+
                         }
                     }
                 },
@@ -250,16 +273,41 @@ public class ClientQuestionView implements Initializable {
                 1000);
     }
 
+
     /**
-     * @author karimtouhami
-     * makes a total gui timout
+     * @author devinhasler
+     * Creates a Timer that shows the right and wrong answers via GUI for 2 seconds
      */
-    public void timeOut() {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    @FXML
+    public void countdownSolutionTimer() {
+
+        btnA.setDisable(true);
+        btnB.setDisable(true);
+        btnC.setDisable(true);
+        btnD.setDisable(true);
+
+        // color button in red when answer was wrong and in green when answer was right.
+        showColorSolution();
+
+        Timer solutionTimer = new Timer();
+        solutionTimer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                Platform.runLater(() -> {
+                    loadQuestionFromList();
+
+                    btnA.setDisable(false);
+                    btnB.setDisable(false);
+                    btnC.setDisable(false);
+                    btnD.setDisable(false);
+                });
+
+            }
+        }, 2000);
+
+
     }
 
 
@@ -274,8 +322,9 @@ public class ClientQuestionView implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/jplquiz/server-ranking.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             ServerRanking serverRanking = fxmlLoader.getController();
+            serverRanking.setClient(client);
             serverRanking.setSocket(socket);
-            serverRanking.listenForRankings();
+            serverRanking.listenForPoints();
             stage.setScene(scene);
             stage.setResizable(false);
             stage.setTitle("Multiplayer Quiz App");

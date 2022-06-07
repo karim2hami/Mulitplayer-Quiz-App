@@ -144,6 +144,8 @@ public class ClientLoginView implements Initializable {
             client.transferQuestions();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         Stage clientLoginView = (Stage) btnEnter.getScene().getWindow();
         clientLoginView.close();
